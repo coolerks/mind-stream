@@ -1,0 +1,82 @@
+package top.integer.blog.service.impl;
+
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryCondition;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
+import top.integer.blog.exception.BizException;
+import top.integer.blog.exception.DataException;
+import top.integer.blog.model.def.RoleDef;
+import top.integer.blog.model.dto.PageQueryDto;
+import top.integer.blog.model.dto.account.CommonPageQueryDto;
+import top.integer.blog.model.entity.Role;
+import top.integer.blog.mapper.RoleMapper;
+import top.integer.blog.model.vo.PageVo;
+import top.integer.blog.model.vo.role.RoleDetailVo;
+import top.integer.blog.model.vo.role.RoleItemVo;
+import top.integer.blog.service.RoleService;
+import org.springframework.stereotype.Service;
+import top.integer.blog.utils.UserUtils;
+
+/**
+ * 角色 服务层实现。
+ *
+ * @author moyok
+ * @since 0.1
+ */
+@Service
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
+
+    @Override
+    public void saveRole(Role role) {
+        Long userId = UserUtils.getUserId();
+        role.setCreateBy(userId);
+
+        verifyRoleName(role);
+
+        this.save(role);
+    }
+
+    private void verifyRoleName(Role role) {
+        RoleDef r = RoleDef.ROLE;
+        QueryWrapper queryWrapper = QueryWrapper.create().and(r.NAME.eq(role.getName()));
+
+        if (this.exists(queryWrapper)) {
+            throw new DataException("角色名称重复");
+        }
+    }
+
+    @Override
+    public PageVo<RoleItemVo> pageRole(CommonPageQueryDto queryDto) {
+        Page<RoleItemVo> page = PageQueryDto.toPage(queryDto, RoleItemVo.class);
+        String keyword = queryDto.getKeyword();
+        Integer status = queryDto.getStatus();
+        RoleDef r = RoleDef.ROLE;
+        QueryWrapper wrapper = QueryWrapper.create()
+                .select(r.ID, r.NAME, r.STATUS, r.STATUS, r.CREATE_TIME)
+                .where(r.NAME.eq(keyword, StringUtils.isNotBlank(keyword))
+                        .and(r.STATUS.eq(status, status != null))
+                );
+        this.pageAs(page, wrapper, RoleItemVo.class);
+        return PageVo.of(page);
+    }
+
+    @Override
+    public RoleDetailVo getRoleDetailById(Long id) {
+        return mapper.getRoleDetailById(id);
+    }
+
+    @Override
+    public void update(Role role) {
+        Long userId = UserUtils.getUserId();
+        role.setUpdateBy(userId);
+
+        Role r = this.getById(role.getId());
+
+        if (!r.getName().equals(role.getName())) {
+            verifyRoleName(role);
+        }
+        this.updateById(role);
+    }
+}

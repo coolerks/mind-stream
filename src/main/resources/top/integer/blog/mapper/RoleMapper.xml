@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.integer.blog.mapper.RoleMapper">
+    <resultMap id="role_detail" type="top.integer.blog.model.vo.role.RoleDetailVo">
+        <id property="id" column="id"/>
+        <result property="name" column="name" />
+        <result property="description" column="description" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="status" column="status" />
+        <association property="createBy" javaType="top.integer.blog.model.vo.account.AccountVo">
+            <id property="id" column="u_id" />
+            <result property="email" column="u_email" />
+            <result property="username" column="u_username" />
+            <result property="nickname" column="u_nickname" />
+            <result property="avatar" column="u_avatar" />
+        </association>
+    </resultMap>
+
+    <select id="getRoleDetailById" resultMap="role_detail">
+        select r.id,
+               r.name,
+               r.description,
+               r.create_time,
+               r.update_time,
+               r.status,
+               u.id       u_id,
+               u.email    u_email,
+               i.nickname u_nickname,
+               u.username u_username,
+               i.avatar   u_avatar
+        from ums_role r
+                 join ums_account_user u on r.create_by = u.id
+                 join ums_account_info i on i.id = u.id
+        where r.id = #{id}
+    </select>
+</mapper>

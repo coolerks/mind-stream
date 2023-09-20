@@ -1,0 +1,38 @@
+server:
+  port: 26000
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: # your jdbc
+    username: # your username
+    password: # your password
+  data:
+    redis:
+      host: # your host
+      port: # your port
+      database: # your database
+knife4j:
+  enable: true
+  setting:
+    enable-home-custom: true
+    home-custom-path: classpath:knife4j/home.md
+    enable-footer: false
+    enable-footer-custom: true
+    footer-custom-content: Apache License 2.0 | Copyright  2023-[Moyok](https://blog.integer.top)
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    persistAuthorization: true
+  group-configs:
+    - group: 接口文档v1
+      packages-to-scan:
+        - top.integer.blog.controller
+cross:
+  list:
+    - path: /**
+      origin:
+        - http://127.0.0.1:5173
+        - http://127.0.0.1:5174
+        - http://localhost:5173
