@@ -2,7 +2,6 @@ package top.integer.blog;
 
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
-import org.bouncycastle.jcajce.provider.symmetric.util.PBE;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,9 +14,13 @@ import top.integer.blog.model.vo.MenusVo;
 import top.integer.blog.model.vo.account.info.AccountItemVo;
 import top.integer.blog.service.MenuService;
 
-import java.lang.reflect.Method;
-import java.sql.SQLException;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.FutureTask;
 
 @SpringBootTest
 class MindStreamApplicationTests {
@@ -54,67 +57,5 @@ class MindStreamApplicationTests {
         System.out.println("menusVos = " + menusVos);
     }
 
-
-
-}
-
-
-
-class User2 {
-    Integer age;
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public void setAge2(String age) {
-
-    }
-}
-
-class Main {
-    public static void main(String[] args) throws NoSuchMethodException {
-        Getter<User, String> getter = User::getUsername;
-        Method method = getter.getClass().getMethods()[0];
-        System.out.println("method.getName() = " + method.getName());
-        User user = new User();
-//        getter.get(user);
-//        Getter<User, String> getter = new Getter<User, String>() {
-//            @Override
-//            public String get(User instance) {
-//                return instance.getUsername();
-//            }
-//        };
-//
-//        Getter<User, String> getter2 = i -> {return i.getUsername();};
-//        Getter<User, String> getter3 = i -> i.getUsername();
-//        Getter<User, String> getter4 = User::getUsername;
-    }
-}
-
-//    public String getUsername() {
-//        return this.username;
-//    }
-
-class User {
-    String username;
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                '}';
-    }
-}
-@FunctionalInterface
-interface Getter<T, V> {
-
-    V get(T instance) ;
 
 }

@@ -1,7 +1,6 @@
-package top.integer.blog.model.dto.account;
+package top.integer.blog.model.dto.update;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,7 +15,13 @@ import org.hibernate.validator.constraints.Range;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "新建账户")
-public class AccountAddDto {
+public class AccountUpdateDto {
+    /**
+     * 账户id
+     */
+    @Schema(description = "账户id")
+    @NotNull(message = "账户id不能为空")
+    private Long id;
     /**
      * 昵称
      */
@@ -49,27 +54,10 @@ public class AccountAddDto {
     private String sign;
 
     /**
-     * 邮箱
-     */
-    @Schema(description = "邮箱")
-    @Email(message = "邮箱格式不正确")
-    @Length(min = 6, max = 30, message = "邮箱6-30个字符")
-    private String email;
-
-    /**
-     * 用户名
-     */
-    @Schema(description = "用户名")
-    @NotBlank(message = "用户名不为空")
-    @Length(min = 6, max = 20, message = "用户名6-30个字符")
-    private String username;
-
-    /**
      * 密码
      */
     @Schema(description = "密码")
     @Length(min = 6, max = 20, message = "密码6-20个字符")
-    @NotBlank(message = "密码不为空")
     private String password;
 
     /**

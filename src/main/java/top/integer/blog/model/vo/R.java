@@ -6,6 +6,7 @@ import top.integer.blog.enums.ResultStatus;
 
 /**
  * 通用的结果返回类
+ *
  * @param <T> 类型
  */
 @Getter

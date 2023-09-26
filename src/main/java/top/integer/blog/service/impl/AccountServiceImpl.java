@@ -14,6 +14,7 @@ import top.integer.blog.model.def.AccountInfoDef;
 import top.integer.blog.model.def.AccountUserDef;
 import top.integer.blog.model.dto.account.AccountAddDto;
 import top.integer.blog.model.dto.account.CommonPageQueryDto;
+import top.integer.blog.model.dto.update.AccountUpdateDto;
 import top.integer.blog.model.entity.AccountInfo;
 import top.integer.blog.model.entity.AccountUser;
 import top.integer.blog.model.vo.PageVo;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Throwable.class)
 public class AccountServiceImpl implements AccountService {
     private final AccountUserMapper mapper;
     private final AccountInfoMapper accountInfoMapper;
@@ -100,5 +102,14 @@ public class AccountServiceImpl implements AccountService {
                 .build();
         BeanUtils.copyProperties(dto, accountInfo);
         this.accountInfoMapper.insertSelective(accountInfo);
+    }
+
+    @Override
+    public void updateAccount(AccountUpdateDto dto) {
+        AccountInfo accountInfo = BeanUtil.copy(dto, new AccountInfo());
+        AccountUser accountUser = BeanUtil.copy(dto, new AccountUser());
+
+        mapper.update(accountUser);
+        accountInfoMapper.update(accountInfo);
     }
 }
