@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import top.integer.blog.event.MyEvent;
 import top.integer.blog.model.dto.account.AccountAddDto;
 import top.integer.blog.model.dto.account.CommonPageQueryDto;
+import top.integer.blog.model.dto.account.LoginDto;
 import top.integer.blog.model.dto.update.AccountUpdateDto;
 import top.integer.blog.model.vo.PageVo;
 import top.integer.blog.model.vo.R;
@@ -16,6 +17,7 @@ import top.integer.blog.model.vo.account.info.AccountItemVo;
 import top.integer.blog.model.vo.account.info.AccountDetailVo;
 import top.integer.blog.service.AccountService;
 import top.integer.blog.service.Publisher;
+import top.integer.blog.utils.UserUtils;
 
 /**
  * 账户
@@ -49,6 +51,13 @@ public class AccountController {
         return R.ok();
     }
 
+    @PostMapping("/login")
+    @Operation(summary = "登录")
+    public R<String> login(@Validated @RequestBody LoginDto dto) {
+        String login = service.login(dto);
+        return R.ok(login);
+    }
+
     @PutMapping("/")
     @Operation(summary = "更新用户")
     public R<String> updateAccount(@Validated @RequestBody AccountUpdateDto dto) {
@@ -58,7 +67,13 @@ public class AccountController {
 
     @Operation(summary = "通过id获取账户信息")
     @GetMapping("/info/{id}")
-    public R<AccountDetailVo> getAccountById(@PathVariable Integer id) {
+    public R<AccountDetailVo> getAccountById(@PathVariable Long id) {
         return R.ok(service.getAccountById(id));
+    }
+
+    @Operation(summary = "获取登录用户信息")
+    @GetMapping("/my")
+    public R<AccountDetailVo> getLoginUserDetail() {
+        return getAccountById(UserUtils.getUserId());
     }
 }

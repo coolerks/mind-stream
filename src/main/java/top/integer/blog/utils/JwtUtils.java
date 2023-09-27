@@ -19,7 +19,7 @@ public class JwtUtils {
     private static String SALT;
     private static JWTVerifier VERIFIER;
 
-    public static String createToken(int userId) {
+    public static String createToken(long userId) {
         return JWT.create()
                 .withExpiresAt(new Date(System.currentTimeMillis() + 3600 * 1000 * 24))
                 .withClaim("id", userId)
@@ -53,8 +53,8 @@ public class JwtUtils {
         VERIFIER.verify(token);
     }
 
-    public static int getUserId(String token) {
-        return VERIFIER.verify(token).getClaim("id").asInt();
+    public static long getUserId(String token) {
+        return VERIFIER.verify(token).getClaim("id").asLong();
     }
 
 

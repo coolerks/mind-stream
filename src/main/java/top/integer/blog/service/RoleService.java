@@ -6,6 +6,7 @@ import top.integer.blog.model.entity.Role;
 import top.integer.blog.model.vo.PageVo;
 import top.integer.blog.model.vo.role.RoleDetailVo;
 import top.integer.blog.model.vo.role.RoleItemVo;
+import top.integer.blog.operation.RoleOperation;
 
 /**
  * 角色 服务层。
@@ -13,7 +14,7 @@ import top.integer.blog.model.vo.role.RoleItemVo;
  * @author moyok
  * @since 0.1
  */
-public interface RoleService extends IService<Role> {
+public interface RoleService extends IService<Role>, RoleOperation {
 
     void saveRole(Role role);
 

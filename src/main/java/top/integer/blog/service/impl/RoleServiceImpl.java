@@ -19,6 +19,11 @@ import top.integer.blog.service.RoleService;
 import org.springframework.stereotype.Service;
 import top.integer.blog.utils.UserUtils;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * 角色 服务层实现。
  *
@@ -78,5 +83,22 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             verifyRoleName(role);
         }
         this.updateById(role);
+    }
+
+    @Override
+    public Set<Long> existRole(List<Long> ids) {
+        if (ids.isEmpty()) {
+            return Collections.emptySet();
+        }
+        RoleDef r = RoleDef.ROLE;
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select(r.ID)
+                .from(r)
+                .where(r.ID.in(ids));
+
+        return mapper.selectListByQuery(queryWrapper)
+                .stream()
+                .map(Role::getId)
+                .collect(Collectors.toSet());
     }
 }

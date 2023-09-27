@@ -34,6 +34,7 @@ public class GlobalExceptionHandler {
         return e.getResult();
     }
 
+
     @ExceptionHandler(Throwable.class)
     public R<String> handleAllExceptions(Throwable e) {
         if (EnvUtils.isTrack) {
@@ -57,7 +58,7 @@ public class GlobalExceptionHandler {
     public void init() {
         String[] activeProfiles = environment.getActiveProfiles();
         for (String activeProfile : activeProfiles) {
-            if ("dev".equals(activeProfile)) {
+            if (!"prod".equals(activeProfile)) {
                 EnvUtils.isTrack = true;
                 return;
             }

@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import top.integer.blog.interceptor.UserIdInterceptor;
 import top.integer.blog.properties.CrossProperties;
 
 import java.util.*;
@@ -15,7 +17,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
     private final CrossProperties crossProperties;
+    private final UserIdInterceptor userIdInterceptor;
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(userIdInterceptor).addPathPatterns("/**");
+    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
