@@ -39,8 +39,6 @@ public class AccountController {
     })
     @GetMapping("/list")
     public R<PageVo<AccountItemVo>> listAccount(CommonPageQueryDto dto) {
-        System.out.println("Thread.currentThread().getName() = " + Thread.currentThread().getName());
-        Publisher.publisher.publishEvent(new MyEvent("你好，世界"));
         return R.ok(service.pageAccount(dto));
     }
 

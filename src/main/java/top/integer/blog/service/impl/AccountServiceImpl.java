@@ -50,7 +50,7 @@ public class AccountServiceImpl implements AccountService {
         String keyword = dto.getKeyword();
         Integer status = dto.getStatus();
         QueryWrapper wrapper = QueryWrapper.create()
-                .select(u.ID, u.USERNAME, u.EMAIL, i.NICKNAME, u.STATUS, u.LAST_LOGIN_TIME)
+                .select(u.ID, u.USERNAME, u.EMAIL, i.NICKNAME, u.STATUS, u.LAST_LOGIN_TIME, i.AVATAR)
                 .from(u)
                 .join(i).on(u.ID.eq(i.ID))
                 .where(

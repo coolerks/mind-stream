@@ -6,15 +6,15 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 /**
- * 用户列表展示的用户信息
+ * 角色详情页中角色所属用户的信息
  */
 @Data
 @ToString
-public class AccountItemVo {
+public class AccountRoleItemVo {
     private Integer id;
     private String nickname;
     private String email;
     private Integer status;
-    private LocalDateTime lastLoginTime;
+    private LocalDateTime createTime;
     private String avatar;
 }

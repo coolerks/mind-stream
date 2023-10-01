@@ -11,7 +11,7 @@ import java.util.List;
  */
 @ToString
 @Data
-public class UserRoleAddBatchDto {
+public class UserRoleBatchDto {
     @NotNull(message = "用户id不能为空")
     private Long userId;
     @NotNull(message = "角色id不能为空")

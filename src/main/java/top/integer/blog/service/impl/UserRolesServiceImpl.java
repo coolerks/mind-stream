@@ -7,12 +7,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import top.integer.blog.exception.DataException;
 import top.integer.blog.mapper.UserRolesMapper;
+import top.integer.blog.model.Pair;
+import top.integer.blog.model.def.AccountInfoDef;
+import top.integer.blog.model.def.AccountUserDef;
 import top.integer.blog.model.def.RoleDef;
 import top.integer.blog.model.def.UserRolesDef;
 import top.integer.blog.model.dto.PageQueryDto;
-import top.integer.blog.model.dto.UserRoleAddBatchDto;
+import top.integer.blog.model.dto.UserRoleBatchDto;
 import top.integer.blog.model.entity.UserRoles;
 import top.integer.blog.model.vo.PageVo;
+import top.integer.blog.model.vo.account.info.AccountRoleItemVo;
 import top.integer.blog.model.vo.role.UserRoleVo;
 import top.integer.blog.operation.AccountOperation;
 import top.integer.blog.operation.RoleOperation;
@@ -21,6 +25,7 @@ import top.integer.blog.utils.UserUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,7 +42,7 @@ public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles
     private final RoleOperation roleOperation;
 
     @Override
-    public void save(UserRoleAddBatchDto dto) {
+    public void save(UserRoleBatchDto dto) {
         Long userId = UserUtils.getUserId();
 
         List<Long> ids = dto.getRoleIds().stream().distinct().toList();
@@ -80,6 +85,32 @@ public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles
                 .where(ur.USER_ID.eq(id));
         mapper.paginateWithRelationsAs(page, queryWrapper, UserRoleVo.class);
         return PageVo.of(page);
+    }
+
+    @Override
+    public PageVo<AccountRoleItemVo> pageRoleUser(Long id, PageQueryDto dto) {
+        AccountUserDef u = AccountUserDef.ACCOUNT_USER;
+        AccountInfoDef i = AccountInfoDef.ACCOUNT_INFO;
+        UserRolesDef r = UserRolesDef.USER_ROLES;
+
+        QueryWrapper wrapper = QueryWrapper.create()
+                .select(u.ID, u.USERNAME, u.EMAIL, i.NICKNAME, u.STATUS, r.CREATE_TIME.as("create_time"), i.AVATAR)
+                .from(u)
+                .join(i).on(u.ID.eq(i.ID))
+                .join(r).on(r.USER_ID.eq(u.ID))
+                .where(r.ID.eq(id));
+
+        Page<AccountRoleItemVo> page = mapper.paginateAs(new Page<>(dto.getPageNumber(), dto.getPageSize()),
+                wrapper, AccountRoleItemVo.class);
+        return PageVo.of(page);
+    }
+
+    @Override
+    public void deleteBatch(UserRoleBatchDto dto) {
+        List<Pair<Long, Long>> ids = dto.getRoleIds().stream()
+                .map(it -> new Pair<>(dto.getUserId(), it))
+                .toList();
+        mapper.deleteBatch(ids);
     }
 
     @Override
