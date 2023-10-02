@@ -13,6 +13,7 @@ import top.integer.blog.model.dto.account.CommonPageQueryDto;
 import top.integer.blog.model.entity.Role;
 import top.integer.blog.mapper.RoleMapper;
 import top.integer.blog.model.vo.PageVo;
+import top.integer.blog.model.vo.role.AssignRoleItemVo;
 import top.integer.blog.model.vo.role.RoleDetailVo;
 import top.integer.blog.model.vo.role.RoleItemVo;
 import top.integer.blog.service.RoleService;
@@ -83,6 +84,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             verifyRoleName(role);
         }
         this.updateById(role);
+    }
+
+    @Override
+    public List<AssignRoleItemVo> listAssignRoles() {
+        RoleDef r = RoleDef.ROLE;
+        QueryWrapper wrapper = QueryWrapper.create()
+                .select(r.ID, r.NAME)
+                .from(r);
+        return this.listAs(wrapper, AssignRoleItemVo.class);
     }
 
     @Override

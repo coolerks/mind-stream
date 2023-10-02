@@ -104,7 +104,7 @@ CREATE TABLE `ums_role_menus`
 -- 权限表
 CREATE TABLE `ums_permissions`
 (
-    `id`          int unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `id`          int unsigned NOT NULL COMMENT '自增id',
     `name`        varchar(255) NOT NULL unique DEFAULT '' COMMENT '角色名称',
     `description` varchar(255) NOT NULL        DEFAULT '' COMMENT '权限描述',
     `create_time` datetime     NOT NULL        DEFAULT current_timestamp COMMENT '创建时间',

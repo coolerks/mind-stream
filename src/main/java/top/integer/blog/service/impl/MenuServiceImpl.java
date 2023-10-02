@@ -30,34 +30,6 @@ import java.util.Objects;
 @Transactional
 @Slf4j
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
-    private final int version;
-
-    @Version(0)
-    private void version1() {
-        List<Menu> rootMenus = MenuConstant.rootMenu();
-        List<Menu> userMenus = MenuConstant.userMenus();
-        this.mapper.insertBatch(rootMenus);
-        this.mapper.insertBatch(userMenus);
-        log.info("新增根菜单和用户菜单成功");
-    }
-
-    public MenuServiceImpl(MenuMapper menuMapper) {
-        this.version = 0;
-        this.mapper = menuMapper;
-        Arrays.stream(this.getClass().getDeclaredMethods())
-                .filter(m -> m.isAnnotationPresent(Version.class))
-                .filter(m -> m.getAnnotation(Version.class).value() > version)
-                .forEach(this::invoke);
-    }
-
-    private void invoke(Method m) {
-        try {
-            m.setAccessible(true);
-            m.invoke(MenuServiceImpl.this);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public List<MenusVo> userMenu() {
@@ -79,4 +51,5 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 .peek(it -> it.setRoutes(buildMenus(all, it.getId())))
                 .toList();
     }
+
 }

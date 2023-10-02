@@ -35,7 +35,6 @@ public class RolePermissionsController {
     /**
      * 添加角色-权限。
      *
-     * @param rolePermissionsDto
      * @return {@code true} 添加成功，{@code false} 添加失败
      */
     @PostMapping("save")

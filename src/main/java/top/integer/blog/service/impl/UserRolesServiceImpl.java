@@ -25,7 +25,6 @@ import top.integer.blog.utils.UserUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -98,7 +97,7 @@ public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles
                 .from(u)
                 .join(i).on(u.ID.eq(i.ID))
                 .join(r).on(r.USER_ID.eq(u.ID))
-                .where(r.ID.eq(id));
+                .where(r.ROLE_ID.eq(id));
 
         Page<AccountRoleItemVo> page = mapper.paginateAs(new Page<>(dto.getPageNumber(), dto.getPageSize()),
                 wrapper, AccountRoleItemVo.class);
@@ -111,6 +110,19 @@ public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles
                 .map(it -> new Pair<>(dto.getUserId(), it))
                 .toList();
         mapper.deleteBatch(ids);
+    }
+
+    @Override
+    public List<Long> listUserRoleIds(Long id) {
+        UserRolesDef r = UserRolesDef.USER_ROLES;
+        QueryWrapper wrapper = QueryWrapper.create()
+                .select(r.ROLE_ID)
+                .from(r)
+                .where(r.USER_ID.eq(id));
+        return mapper.selectListByQuery(wrapper)
+                .stream()
+                .map(UserRoles::getRoleId)
+                .toList();
     }
 
     @Override

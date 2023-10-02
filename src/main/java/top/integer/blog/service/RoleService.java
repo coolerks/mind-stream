@@ -4,9 +4,12 @@ import com.mybatisflex.core.service.IService;
 import top.integer.blog.model.dto.account.CommonPageQueryDto;
 import top.integer.blog.model.entity.Role;
 import top.integer.blog.model.vo.PageVo;
+import top.integer.blog.model.vo.role.AssignRoleItemVo;
 import top.integer.blog.model.vo.role.RoleDetailVo;
 import top.integer.blog.model.vo.role.RoleItemVo;
 import top.integer.blog.operation.RoleOperation;
+
+import java.util.List;
 
 /**
  * 角色 服务层。
@@ -23,4 +26,7 @@ public interface RoleService extends IService<Role>, RoleOperation {
     RoleDetailVo getRoleDetailById(Long id);
 
     void update(Role role);
+
+    List<AssignRoleItemVo> listAssignRoles();
+
 }

@@ -14,6 +14,8 @@ import top.integer.blog.model.vo.account.info.AccountRoleItemVo;
 import top.integer.blog.model.vo.role.UserRoleVo;
 import top.integer.blog.service.UserRolesService;
 
+import java.util.List;
+
 /**
  * 用户角色 控制层。
  *
@@ -63,5 +65,13 @@ public class UserRolesController {
         userRolesService.deleteBatch(dto);
         return R.ok();
     }
+
+    @GetMapping("/list/{id}")
+    @Operation(summary = "获取用户角色的id")
+    public R<List<Long>> listUserRoleIds(@PathVariable Long id) {
+        List<Long> ids = userRolesService.listUserRoleIds(id);
+        return R.ok(ids);
+    }
+
 
 }

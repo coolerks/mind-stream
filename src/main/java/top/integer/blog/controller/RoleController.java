@@ -14,6 +14,7 @@ import top.integer.blog.model.entity.Role;
 import top.integer.blog.model.vo.PageVo;
 import top.integer.blog.model.vo.R;
 import top.integer.blog.model.vo.RoleVo;
+import top.integer.blog.model.vo.role.AssignRoleItemVo;
 import top.integer.blog.model.vo.role.RoleDetailVo;
 import top.integer.blog.model.vo.role.RoleItemVo;
 import top.integer.blog.service.RoleService;
@@ -59,6 +60,7 @@ public class RoleController {
      */
     @DeleteMapping("remove/{id}")
     @Operation(summary = "根据主键角色")
+    @Deprecated
     public R<Boolean> remove(@PathVariable @Parameter(description = "角色主键") Serializable id) {
         return R.ok(roleService.removeById(id));
     }
@@ -104,6 +106,17 @@ public class RoleController {
     })
     public R<PageVo<RoleItemVo>> page(@Parameter(description = "分页信息") CommonPageQueryDto queryDto) {
         return R.ok(roleService.pageRole(queryDto));
+    }
+
+    /**
+     * 所有角色
+     * @return
+     */
+    @Operation(summary = "获取所有角色id、名称")
+    @GetMapping("/list/all")
+    public R<List<AssignRoleItemVo>> listAssignRoles() {
+        List<AssignRoleItemVo> result = roleService.listAssignRoles();
+        return R.ok(result);
     }
 
 }
