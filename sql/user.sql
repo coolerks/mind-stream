@@ -84,6 +84,8 @@ CREATE TABLE `ums_user_roles`
   DEFAULT CHARSET = utf8mb4 COMMENT ='用户角色';
 
 
+drop table ums_role_menus;
+
 -- 菜单-角色
 CREATE TABLE `ums_role_menus`
 (
@@ -91,10 +93,8 @@ CREATE TABLE `ums_role_menus`
     `role_id`     int unsigned NOT NULL DEFAULT 0 COMMENT '角色id',
     `menu_id`     int unsigned NOT NULL DEFAULT 0 COMMENT '菜单id',
     `create_time` datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
-    `update_time` datetime     NOT NULL DEFAULT current_timestamp on update current_timestamp COMMENT '更新时间',
     `create_by`   int unsigned NOT NULL DEFAULT 0 COMMENT '创建者',
-    `update_by`   int unsigned NOT NULL DEFAULT 0 COMMENT '修改者',
-    `status`      tinyint      NOT NULL DEFAULT 1 COMMENT '状态 1:enable, 0:disable, -1:deleted',
+    `create_ip`   int unsigned not null default 0 comment '创建者ip',
     PRIMARY KEY (`id`),
     KEY `idx_role_menu_id` (`role_id`, `menu_id`)
 ) ENGINE = InnoDB
@@ -116,15 +116,12 @@ CREATE TABLE `ums_permissions`
 -- 角色-权限
 CREATE TABLE `ums_role_permissions`
 (
-    `id`              int unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-    `role_id`         int unsigned NOT NULL DEFAULT 0 COMMENT '角色id',
-    `permissions_id`  int unsigned NOT NULL DEFAULT 0 COMMENT '权限id',
-    `permission_type` tinyint      not null default 0 comment '权限类型',
-    `create_at`       int          NOT NULL DEFAULT 0 COMMENT '创建时间',
-    `create_time`     datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
-    `update_time`     datetime     NOT NULL DEFAULT current_timestamp on update current_timestamp COMMENT '更新时间',
-    `update_by`       int          NOT NULL DEFAULT 0 COMMENT '修改者',
-    `status`          tinyint      NOT NULL DEFAULT 1 COMMENT '状态 1:enable, 0:disable, -1:deleted',
+    `id`             int unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `role_id`        int unsigned NOT NULL DEFAULT 0 COMMENT '角色id',
+    `permissions_id` int unsigned NOT NULL DEFAULT 0 COMMENT '权限id',
+    `create_at`      int unsigned NOT NULL DEFAULT 0 COMMENT '创建IP',
+    `create_time`    datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `create_by`      int unsigned NOT NULL DEFAULT 0 COMMENT '修改者',
     PRIMARY KEY (`id`),
     KEY `idx_role_menu_id` (`role_id`, `permissions_id`)
 ) ENGINE = InnoDB

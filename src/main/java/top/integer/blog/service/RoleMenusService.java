@@ -1,7 +1,10 @@
 package top.integer.blog.service;
 
 import com.mybatisflex.core.service.IService;
+import top.integer.blog.model.dto.RoleMenuBatchDto;
 import top.integer.blog.model.entity.RoleMenus;
+
+import java.util.List;
 
 /**
  * 菜单-角色 服务层。
@@ -11,4 +14,9 @@ import top.integer.blog.model.entity.RoleMenus;
  */
 public interface RoleMenusService extends IService<RoleMenus> {
 
+    void addRoleMenu(RoleMenuBatchDto dto);
+
+    void removeRoleMenu(RoleMenuBatchDto dto);
+
+    List<Long> roleMenuIds(Long id);
 }

@@ -14,22 +14,22 @@ public class MenuConstant {
     public static List<Menu> userMenus() {
         LocalDateTime now = LocalDateTime.now();
         Menu users = Menu.builder().id(8L).parentId(5L)
-                .menuName("用户管理").description("全部用户").menuUri("list")
+                .menuName("用户管理").description("全部用户").menuUri("/users/list")
                 .isShow(true).icon("").order(1)
                 .createTime(now).updateTime(now)
                 .build();
         Menu roles = Menu.builder().id(9L).parentId(5L)
-                .menuName("角色管理").description("全部角色").menuUri("role")
+                .menuName("角色管理").description("全部角色").menuUri("/users/role")
                 .isShow(true).icon("").order(2)
                 .createTime(now).updateTime(now)
                 .build();
         Menu permissions = Menu.builder().id(10L).parentId(5L)
-                .menuName("权限管理").description("权限信息").menuUri("permission")
+                .menuName("权限管理").description("权限信息").menuUri("/users/permission")
                 .isShow(true).icon("").order(3)
                 .createTime(now).updateTime(now)
                 .build();
         Menu menus = Menu.builder().id(11L).parentId(5L)
-                .menuName("菜单管理").description("菜单信息").menuUri("menu")
+                .menuName("菜单管理").description("菜单信息").menuUri("/users/menu")
                 .isShow(true).icon("").order(4)
                 .createTime(now).updateTime(now)
                 .build();

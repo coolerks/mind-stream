@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import top.integer.blog.enums.Permission;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ public class Permissions implements Serializable {
     /**
      * 自增id
      */
-    @Id(keyType = KeyType.Auto)
+    @Id(keyType = KeyType.None)
     @Schema(description = "自增id")
     private Long id;
 
@@ -50,5 +51,15 @@ public class Permissions implements Serializable {
      */
     @Schema(description = "创建时间")
     private LocalDateTime createTime = LocalDateTime.now();
+
+    public static Permissions of(Permission permission) {
+        LocalDateTime now = LocalDateTime.now();
+        return Permissions.builder()
+                .id(permission.id)
+                .name(permission.name)
+                .description(permission.description)
+                .createTime(now)
+                .build();
+    }
 
 }

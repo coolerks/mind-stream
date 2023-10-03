@@ -4,4 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.integer.blog.mapper.RolePermissionsMapper">
 
+    <delete id="removeBatch">
+        delete from ums_role_permissions
+        where (role_id, permissions_id) in
+        <foreach collection="ids" open="(" close=")" separator="," item="item">
+            (#{item.key}, #{item.value})
+        </foreach>
+    </delete>
 </mapper>

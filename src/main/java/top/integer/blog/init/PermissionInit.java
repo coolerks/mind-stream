@@ -1,16 +1,27 @@
 package top.integer.blog.init;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import top.integer.blog.annotation.Version;
-import top.integer.blog.mapper.MenuMapper;
+import top.integer.blog.constant.PermissionConstant;
 import top.integer.blog.mapper.PermissionsMapper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+@Component
+@Slf4j
 public class PermissionInit {
     private final PermissionsMapper mapper;
     private final int version;
+
+    @Version(0)
+    public void version1() {
+        mapper.insertBatch(PermissionConstant.userManagerPermissions());
+        mapper.insertBatch(PermissionConstant.roleManagerPermissions());
+        log.info("初始化用户、角色权限成功");
+    }
 
 
     private void invoke(Method m) {

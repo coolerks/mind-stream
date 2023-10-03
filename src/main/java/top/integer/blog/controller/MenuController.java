@@ -36,8 +36,15 @@ public class MenuController {
 
     @GetMapping("/")
     @Operation(summary = "获取当前用户的路由菜单")
-    public R<List<MenusVo>> getRouteMenus() {
+    public R<List<MenusVo>> getCurrentUserRouteMenus() {
         return R.ok(menuService.userMenu());
     }
+
+    @GetMapping("/all")
+    @Operation(summary = "获取所有的菜单")
+    public R<List<MenusVo>> getAllMenus() {
+        return R.ok(menuService.allMenus());
+    }
+
 
 }

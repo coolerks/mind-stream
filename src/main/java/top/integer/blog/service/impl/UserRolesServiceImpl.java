@@ -24,6 +24,7 @@ import top.integer.blog.service.UserRolesService;
 import top.integer.blog.utils.UserUtils;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,25 +44,25 @@ public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles
     @Override
     public void save(UserRoleBatchDto dto) {
         Long userId = UserUtils.getUserId();
+        LocalDateTime now = LocalDateTime.now();
 
-        List<Long> ids = dto.getRoleIds().stream().distinct().toList();
-        if (ids.isEmpty()) {
+        List<Long> distinctIds = dto.getRoleIds().stream().distinct().toList();
+        if (distinctIds.isEmpty()) {
             throw new DataException("角色信息不能为空");
         }
         if (!accountOperation.existAccount(dto.getUserId())) {
             throw new DataException("不存在此用户");
         }
 
-        // 被设置过的角色id集合
-        Set<Long> roleIdSet = existRole(ids);
-        // 还没有被此用户添加的角色
-        List<Long> roleIds = ids.stream().filter(it -> !roleIdSet.contains(it)).toList();
-        // 所有存在的角色
-        Set<Long> set = roleOperation.existRole(roleIds);
+        // 去重
+        // 过滤掉不存在的角色
+        // 过滤掉被设置过的角色
+        Set<Long> existRole = roleOperation.existRole(distinctIds);
+        Set<Long> ownedRole = new HashSet<>(this.listUserRoleIds(dto.getUserId()));
 
-        LocalDateTime now = LocalDateTime.now();
-        List<UserRoles> userRoles = ids.stream()
-                .filter(set::contains)
+        List<UserRoles> userRoles = distinctIds.stream()
+                .filter(existRole::contains)
+                .filter(it -> !ownedRole.contains(it))
                 .map(it -> UserRoles.builder()
                         .createBy(userId).userId(dto.getUserId()).updateBy(userId).roleId(it)
                         .createTime(now).updateTime(now).build())
@@ -69,6 +70,7 @@ public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles
         if (userRoles.isEmpty()) {
             return;
         }
+        System.out.println("userRoles = " + userRoles);
         mapper.insertBatch(userRoles);
     }
 

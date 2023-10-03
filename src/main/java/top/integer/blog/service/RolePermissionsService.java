@@ -1,7 +1,10 @@
 package top.integer.blog.service;
 
 import com.mybatisflex.core.service.IService;
+import top.integer.blog.model.dto.RolePermissionBatchDto;
 import top.integer.blog.model.entity.RolePermissions;
+
+import java.util.List;
 
 /**
  * 角色-权限 服务层。
@@ -11,4 +14,9 @@ import top.integer.blog.model.entity.RolePermissions;
  */
 public interface RolePermissionsService extends IService<RolePermissions> {
 
+    List<Long> getRolePermissionIds(Long id);
+
+    void addPermission(RolePermissionBatchDto dto);
+
+    void removePermission(RolePermissionBatchDto dto);
 }

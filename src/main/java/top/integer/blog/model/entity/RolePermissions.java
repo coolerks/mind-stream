@@ -45,17 +45,12 @@ public class RolePermissions implements Serializable {
     @Schema(description = "权限id")
     private Long permissionsId;
 
-    /**
-     * 权限类型
-     */
-    @Schema(description = "权限类型")
-    private Integer permissionType;
 
     /**
      * 创建时间
      */
-    @Schema(description = "创建时间")
-    private Integer createAt;
+    @Schema(description = "创建IP")
+    private Long createAt;
 
     /**
      * 创建时间
@@ -63,22 +58,11 @@ public class RolePermissions implements Serializable {
     @Schema(description = "创建时间")
     private LocalDateTime createTime = LocalDateTime.now();
 
-    /**
-     * 更新时间
-     */
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime = LocalDateTime.now();
 
     /**
      * 修改者
      */
     @Schema(description = "修改者")
-    private Integer updateBy;
-
-    /**
-     * 状态 1:enable, 0:disable, -1:deleted
-     */
-    @Schema(description = "状态 1:enable, 0:disable, -1:deleted")
-    private Integer status;
+    private Long createBy;
 
 }

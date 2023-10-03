@@ -51,11 +51,6 @@ public class RoleMenus implements Serializable {
     @Schema(description = "创建时间")
     private LocalDateTime createTime = LocalDateTime.now();
 
-    /**
-     * 更新时间
-     */
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime = LocalDateTime.now();
 
     /**
      * 创建者
@@ -64,15 +59,8 @@ public class RoleMenus implements Serializable {
     private Long createBy;
 
     /**
-     * 修改者
+     * 创建者
      */
-    @Schema(description = "修改者")
-    private Long updateBy;
-
-    /**
-     * 状态 1:enable, 0:disable, -1:deleted
-     */
-    @Schema(description = "状态 1:enable, 0:disable, -1:deleted")
-    private Integer status;
-
+    @Schema(description = "创建者IP")
+    private Long createIp;
 }

@@ -26,7 +26,7 @@ public enum Permission {
     /**
      * id
      */
-    public final int id;
+    public final long id;
     /**
      * 权限名称
      */
@@ -36,7 +36,7 @@ public enum Permission {
      */
     public final String description;
 
-    Permission(int id, String name, String description) {
+    Permission(long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
