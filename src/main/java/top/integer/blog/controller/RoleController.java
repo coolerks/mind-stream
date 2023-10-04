@@ -7,6 +7,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.integer.blog.annotation.PermissionCheck;
+import top.integer.blog.enums.Permission;
 import top.integer.blog.model.dto.RoleDto;
 import top.integer.blog.model.dto.account.CommonPageQueryDto;
 import top.integer.blog.model.dto.update.RoleUpdateDto;
@@ -97,6 +99,7 @@ public class RoleController {
      *
      * @return 分页对象
      */
+    @PermissionCheck(Permission.VIEW_ROLE_LIST)
     @GetMapping("/list")
     @Operation(summary = "分页查询角色", parameters = {
             @Parameter(name = "pageNumber"),

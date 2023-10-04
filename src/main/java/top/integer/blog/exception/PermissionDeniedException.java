@@ -9,7 +9,7 @@ import top.integer.blog.model.vo.R;
  */
 public class PermissionDeniedException extends BizException{
     public PermissionDeniedException() {
-        super("请登录");
+        super("没有权限");
     }
 
     @Override

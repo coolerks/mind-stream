@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.integer.blog.annotation.PermissionCheck;
+import top.integer.blog.enums.Permission;
 import top.integer.blog.event.MyEvent;
 import top.integer.blog.model.dto.account.AccountAddDto;
 import top.integer.blog.model.dto.account.CommonPageQueryDto;

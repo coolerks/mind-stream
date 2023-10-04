@@ -3,6 +3,7 @@ package top.integer.blog.service;
 import com.mybatisflex.core.service.IService;
 import top.integer.blog.model.dto.RolePermissionBatchDto;
 import top.integer.blog.model.entity.RolePermissions;
+import top.integer.blog.operation.RolePermissionOperation;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author moyok
  * @since 0.1
  */
-public interface RolePermissionsService extends IService<RolePermissions> {
+public interface RolePermissionsService extends IService<RolePermissions>, RolePermissionOperation {
 
     List<Long> getRolePermissionIds(Long id);
 

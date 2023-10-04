@@ -41,12 +41,17 @@ public class RoleMenusServiceImpl extends ServiceImpl<RoleMenusMapper, RoleMenus
         Long userId = UserUtils.getUserId();
         long ip = IpUtils.getIpLong();
         LocalDateTime now = LocalDateTime.now();
+        Long roleId = dto.getRoleId();
+
+        if (roleId == 1) {
+            throw new DataException("不允许修改超级管理员的菜单");
+        }
 
         if (dto.getMenuIds() == null || dto.getMenuIds().isEmpty()) {
             return;
         }
 
-        if (!roleOperation.existRole(dto.getRoleId())) {
+        if (!roleOperation.existRole(roleId)) {
             throw new DataException("角色不存在");
         }
         // 去重
@@ -54,12 +59,12 @@ public class RoleMenusServiceImpl extends ServiceImpl<RoleMenusMapper, RoleMenus
         // 过滤已经添加过的菜单
         List<Long> distinctIds = dto.getMenuIds().stream().distinct().toList();
         Set<Long> existMenus = menuOperation.existMenus(distinctIds);
-        Set<Long> addedMenus = new HashSet<>(this.roleMenuIds(dto.getRoleId()));
+        Set<Long> addedMenus = new HashSet<>(this.roleMenuIds(roleId));
         List<RoleMenus> roleMenus = distinctIds.stream()
                 .filter(existMenus::contains)
                 .filter(it -> !addedMenus.contains(it))
                 .map(it -> RoleMenus.builder()
-                        .roleId(dto.getRoleId())
+                        .roleId(roleId)
                         .menuId(it)
                         .createBy(userId)
                         .createIp(ip)
@@ -72,7 +77,12 @@ public class RoleMenusServiceImpl extends ServiceImpl<RoleMenusMapper, RoleMenus
 
     @Override
     public void removeRoleMenu(RoleMenuBatchDto dto) {
-        List<Pair<Long, Long>> ids = dto.getMenuIds().stream().map(it -> new Pair<>(dto.getRoleId(), it)).toList();
+        Long roleId = dto.getRoleId();
+        if (roleId == 1) {
+            throw new DataException("不允许修改超级管理员的菜单");
+        }
+
+        List<Pair<Long, Long>> ids = dto.getMenuIds().stream().map(it -> new Pair<>(roleId, it)).toList();
         this.mapper.removeRoleMenu(ids);
     }
 

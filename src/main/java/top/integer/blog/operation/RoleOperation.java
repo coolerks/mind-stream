@@ -19,4 +19,6 @@ public interface RoleOperation {
      * @return 存在/不存在
      */
     Set<Long> existRole(List<Long> ids);
+
+
 }

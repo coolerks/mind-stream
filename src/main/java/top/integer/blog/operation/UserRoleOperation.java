@@ -19,4 +19,13 @@ public interface UserRoleOperation {
      * @return 存在/不存在
      */
     Set<Long> existRole(List<Long> ids);
+
+    /**
+     * 用户的角色id
+     * @param userId
+     * @return
+     */
+    Set<Long> userRoleIds(long userId);
+
+
 }

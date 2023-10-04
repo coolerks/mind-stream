@@ -3,13 +3,16 @@ package top.integer.blog.service.impl;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.ToString;
+import top.integer.blog.enums.Permission;
 import top.integer.blog.model.def.PermissionsDef;
 import top.integer.blog.model.entity.Permissions;
 import top.integer.blog.mapper.PermissionsMapper;
 import top.integer.blog.operation.PermissionsOperation;
 import top.integer.blog.service.PermissionsService;
 import org.springframework.stereotype.Service;
+import top.integer.blog.utils.UserUtils;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;

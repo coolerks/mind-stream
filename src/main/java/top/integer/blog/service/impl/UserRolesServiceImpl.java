@@ -4,6 +4,7 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import top.integer.blog.exception.DataException;
 import top.integer.blog.mapper.UserRolesMapper;
@@ -18,6 +19,7 @@ import top.integer.blog.model.entity.UserRoles;
 import top.integer.blog.model.vo.PageVo;
 import top.integer.blog.model.vo.account.info.AccountRoleItemVo;
 import top.integer.blog.model.vo.role.UserRoleVo;
+import top.integer.blog.operation.AccountEnsureOperation;
 import top.integer.blog.operation.AccountOperation;
 import top.integer.blog.operation.RoleOperation;
 import top.integer.blog.service.UserRolesService;
@@ -27,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -40,11 +43,21 @@ import java.util.stream.Collectors;
 public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles> implements UserRolesService {
     private final AccountOperation accountOperation;
     private final RoleOperation roleOperation;
+    private final static String rolePrefix = "role:user:";
+    private final RedisTemplate<String, Object> template;
+    private final AccountEnsureOperation accountEnsureOperation;
+
 
     @Override
     public void save(UserRoleBatchDto dto) {
         Long userId = UserUtils.getUserId();
         LocalDateTime now = LocalDateTime.now();
+
+        if (dto.getRoleIds().contains(1L)) {
+            if (!this.userRoleIds(userId).contains(1L)) {
+                throw new DataException("当前用户不是超级管理员，无法为此用户分配超级管理员角色");
+            }
+        }
 
         List<Long> distinctIds = dto.getRoleIds().stream().distinct().toList();
         if (distinctIds.isEmpty()) {
@@ -70,8 +83,8 @@ public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles
         if (userRoles.isEmpty()) {
             return;
         }
-        System.out.println("userRoles = " + userRoles);
         mapper.insertBatch(userRoles);
+        template.delete(rolePrefix + userId);
     }
 
     @Override
@@ -108,10 +121,15 @@ public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles
 
     @Override
     public void deleteBatch(UserRoleBatchDto dto) {
-        List<Pair<Long, Long>> ids = dto.getRoleIds().stream()
+        List<Long> roleIds = dto.getRoleIds();
+        if (roleIds.contains(1L)) {
+            accountEnsureOperation.ensureExistSuperAdmin(dto.getUserId());
+        }
+        List<Pair<Long, Long>> ids = roleIds.stream()
                 .map(it -> new Pair<>(dto.getUserId(), it))
                 .toList();
         mapper.deleteBatch(ids);
+        template.delete(rolePrefix + dto.getUserId());
     }
 
     @Override
@@ -137,4 +155,25 @@ public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles
                 .where(ur.ROLE_ID.in(list));
         return mapper.selectListByQuery(queryWrapper).stream().map(UserRoles::getRoleId).collect(Collectors.toSet());
     }
+
+    @Override
+    public Set<Long> userRoleIds(long userId) {
+        String key = rolePrefix + userId;
+        Set<Object> ids = template.opsForSet().members(key);
+        if (ids == null || ids.isEmpty()) {
+            HashSet<Long> roleIdSet = new HashSet<>(listUserRoleIds(userId));
+            if (roleIdSet.isEmpty()) {
+                template.opsForSet().add(key, -1);
+            } else {
+                template.opsForSet().add(key, roleIdSet.toArray());
+            }
+            template.expire(key, 5, TimeUnit.MINUTES);
+            return roleIdSet;
+        }
+        template.expire(key, 5, TimeUnit.MINUTES);
+        return ids.stream().map(it -> Long.valueOf(it.toString())).collect(Collectors.toSet());
+    }
+
+
+
 }

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.integer.blog.enums.Permission;
 import top.integer.blog.exception.DataException;
 import top.integer.blog.mapper.AccountInfoMapper;
 import top.integer.blog.mapper.AccountUserMapper;
@@ -22,6 +23,9 @@ import top.integer.blog.model.entity.AccountUser;
 import top.integer.blog.model.vo.PageVo;
 import top.integer.blog.model.vo.account.info.AccountDetailVo;
 import top.integer.blog.model.vo.account.info.AccountItemVo;
+import top.integer.blog.operation.AccountEnsureOperation;
+import top.integer.blog.operation.RolePermissionOperation;
+import top.integer.blog.operation.UserRoleOperation;
 import top.integer.blog.service.AccountService;
 import top.integer.blog.utils.BeanUtil;
 import top.integer.blog.utils.IpUtils;
@@ -40,6 +44,7 @@ import java.util.stream.Collectors;
 public class AccountServiceImpl implements AccountService {
     private final AccountUserMapper mapper;
     private final AccountInfoMapper accountInfoMapper;
+    private final AccountEnsureOperation accountEnsureOperation;
     private final MD5 md5 = MD5.create();
     private final String salt = "fZTNSWajDQFJ8qDsI4DWhkYSD4U^ryK";
 
@@ -121,6 +126,8 @@ public class AccountServiceImpl implements AccountService {
         AccountInfo accountInfo = BeanUtil.copy(dto, new AccountInfo());
         AccountUser accountUser = BeanUtil.copy(dto, new AccountUser());
 
+        accountEnsureOperation.ensureExistSuperAdmin(dto.getId());
+
         mapper.update(accountUser);
         accountInfoMapper.update(accountInfo);
     }
@@ -164,4 +171,5 @@ public class AccountServiceImpl implements AccountService {
                 .where(u.ID.in(list));
         return mapper.selectListByQuery(queryWrapper).stream().map(AccountUser::getId).collect(Collectors.toSet());
     }
+
 }
