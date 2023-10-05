@@ -32,29 +32,19 @@ public class RoleMenusDef extends TableDef {
     public final QueryColumn ROLE_ID = new QueryColumn(this, "role_id");
 
     /**
-     * 状态 1:enable, 0:disable, -1:deleted
-     */
-    public final QueryColumn STATUS = new QueryColumn(this, "status");
-
-    /**
      * 创建者
      */
     public final QueryColumn CREATE_BY = new QueryColumn(this, "create_by");
 
     /**
-     * 修改者
+     * 创建者ip
      */
-    public final QueryColumn UPDATE_BY = new QueryColumn(this, "update_by");
+    public final QueryColumn CREATE_IP = new QueryColumn(this, "create_ip");
 
     /**
      * 创建时间
      */
     public final QueryColumn CREATE_TIME = new QueryColumn(this, "create_time");
-
-    /**
-     * 更新时间
-     */
-    public final QueryColumn UPDATE_TIME = new QueryColumn(this, "update_time");
 
     /**
      * 所有字段。
@@ -64,7 +54,7 @@ public class RoleMenusDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, ROLE_ID, MENU_ID, CREATE_TIME, UPDATE_TIME, CREATE_BY, UPDATE_BY, STATUS};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, ROLE_ID, MENU_ID, CREATE_TIME, CREATE_BY, CREATE_IP};
 
     public RoleMenusDef() {
         super("", "ums_role_menus");

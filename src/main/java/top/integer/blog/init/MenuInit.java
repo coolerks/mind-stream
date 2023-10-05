@@ -1,22 +1,21 @@
 package top.integer.blog.init;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import top.integer.blog.annotation.Version;
 import top.integer.blog.constant.MenuConstant;
 import top.integer.blog.mapper.MenuMapper;
 import top.integer.blog.model.entity.Menu;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 
-@Service
+@Component
+@RequiredArgsConstructor
 @Slf4j
-public class MenuInit {
-    private final int version;
+public class MenuInit implements Init {
     private final MenuMapper mapper;
+
 
 
     @Version(0)
@@ -28,24 +27,4 @@ public class MenuInit {
         log.info("新增根菜单和用户菜单成功");
     }
 
-
-
-    private void invoke(Method m) {
-        try {
-            m.setAccessible(true);
-            m.invoke(MenuInit.this);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public MenuInit(MenuMapper menuMapper) {
-        this.version = 0;
-        this.mapper = menuMapper;
-        Arrays.stream(this.getClass().getDeclaredMethods())
-                .filter(m -> m.isAnnotationPresent(Version.class))
-                .filter(m -> m.getAnnotation(Version.class).value() > version)
-                .distinct()
-                .forEach(this::invoke);
-    }
 }

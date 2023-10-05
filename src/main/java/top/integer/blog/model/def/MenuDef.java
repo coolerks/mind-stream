@@ -21,6 +21,12 @@ public class MenuDef extends TableDef {
      */
     public final QueryColumn ID = new QueryColumn(this, "id");
 
+
+    public final QueryColumn ICON = new QueryColumn(this, "icon");
+
+
+    public final QueryColumn ORDER = new QueryColumn(this, "order");
+
     /**
      * 是否展示菜单
      */
@@ -42,11 +48,6 @@ public class MenuDef extends TableDef {
     public final QueryColumn PARENT_ID = new QueryColumn(this, "parent_id");
 
     /**
-     * 修改者
-     */
-    public final QueryColumn UPDATE_BY = new QueryColumn(this, "update_by");
-
-    /**
      * 创建时间
      */
     public final QueryColumn CREATE_TIME = new QueryColumn(this, "create_time");
@@ -62,16 +63,6 @@ public class MenuDef extends TableDef {
     public final QueryColumn DESCRIPTION = new QueryColumn(this, "description");
 
     /**
-     * 菜单描述
-     */
-    public final QueryColumn ORDER = new QueryColumn(this, "order");
-
-/**
-     * 菜单描述
-     */
-    public final QueryColumn ICON = new QueryColumn(this, "icon");
-
-    /**
      * 所有字段。
      */
     public final QueryColumn ALL_COLUMNS = new QueryColumn(this, "*");
@@ -79,7 +70,7 @@ public class MenuDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, PARENT_ID, MENU_NAME, DESCRIPTION, MENU_URI, IS_SHOW, CREATE_TIME, UPDATE_TIME, UPDATE_BY};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, PARENT_ID, MENU_NAME, DESCRIPTION, MENU_URI, IS_SHOW, CREATE_TIME, UPDATE_TIME, ORDER, ICON};
 
     public MenuDef() {
         super("", "ums_menu");

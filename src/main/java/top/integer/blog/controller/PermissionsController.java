@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.integer.blog.annotation.PermissionCheck;
+import top.integer.blog.enums.Permission;
 import top.integer.blog.model.dto.PermissionsDto;
 import top.integer.blog.model.dto.update.PermissionsUpdateDto;
 import top.integer.blog.model.entity.Permissions;
@@ -38,6 +40,7 @@ public class PermissionsController {
      *
      * @return 所有数据
      */
+    @PermissionCheck(Permission.VIEW_ALL_PERMISSIONS)
     @GetMapping("/list")
     @Operation(summary = "查询所有权限")
     public R<List<PermissionsVo>> list() {

@@ -21,7 +21,22 @@ public enum Permission {
     DELETE_ROLE(8, "delete_role", "删除角色"),
     ADD_ROLE(9, "add_role", "新增角色"),
     ASSIGN_USER_ROLE(10, "assign_user_role", "分配用户角色"),
-    CANCEL_USER_ROLE(11, "cancel_user_role", "取消用户角色");
+    CANCEL_USER_ROLE(11, "cancel_user_role", "取消用户角色"),
+    VIEW_USER_ROLE(12, "view_user_role", "查看用户角色"),
+    /**
+     * 菜单管理相关权限
+     */
+    ADD_ROLE_MENU(13, "add_role_menu", "添加角色菜单"),
+    CANCEL_ROLE_MENU(14, "cancel_role_menu", "取消角色菜单"),
+    VIEW_ALL_MENUS(15, "view_all_menus", "查看所有菜单"),
+    VIEW_ROLE_MENUS(16, "view_role_menus", "查看角色菜单"),
+
+    /**
+     * 权限管理相关权限
+     */
+    VIEW_ALL_PERMISSIONS(17, "view_all_permissions", "查看所有权限"),
+    ASSIGN_PERMISSION(18, "assign_permission", "分配权限"),
+    CANCEL_PERMISSION(19, "cancel_permission", "取消权限");
 
     /**
      * id

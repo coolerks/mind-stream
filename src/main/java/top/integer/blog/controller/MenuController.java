@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.integer.blog.annotation.PermissionCheck;
+import top.integer.blog.enums.Permission;
 import top.integer.blog.model.dto.MenuDto;
 import top.integer.blog.model.dto.update.MenuUpdateDto;
 import top.integer.blog.model.entity.Menu;
@@ -42,6 +44,7 @@ public class MenuController {
 
     @GetMapping("/all")
     @Operation(summary = "获取所有的菜单")
+    @PermissionCheck(Permission.VIEW_ALL_MENUS)
     public R<List<MenusVo>> getAllMenus() {
         return R.ok(menuService.allMenus());
     }

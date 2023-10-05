@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import top.integer.blog.enums.Permission;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -64,5 +65,15 @@ public class RolePermissions implements Serializable {
      */
     @Schema(description = "修改者")
     private Long createBy;
+
+    public static RolePermissions of(Long roleId, Permission permission) {
+        return RolePermissions.builder()
+                .roleId(roleId)
+                .permissionsId(permission.id)
+                .createAt(2130706433L)
+                .createTime(LocalDateTime.now())
+                .createBy(1001L)
+                .build();
+    }
 
 }

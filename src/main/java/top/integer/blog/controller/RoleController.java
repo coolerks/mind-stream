@@ -45,6 +45,7 @@ public class RoleController {
      * @param roleDto 角色
      * @return {@code true} 添加成功，{@code false} 添加失败
      */
+    @PermissionCheck(Permission.ADD_ROLE)
     @PostMapping("/")
     @Operation(summary = "保存角色")
     public R<String> save(@Validated @RequestBody @Parameter(description = "角色") RoleDto roleDto) {
@@ -60,6 +61,7 @@ public class RoleController {
      * @param id 主键
      * @return {@code true} 删除成功，{@code false} 删除失败
      */
+    @PermissionCheck(Permission.DELETE_ROLE)
     @DeleteMapping("remove/{id}")
     @Operation(summary = "根据主键角色")
     @Deprecated
@@ -73,6 +75,7 @@ public class RoleController {
      * @param roleUpdateDto 角色
      * @return {@code true} 更新成功，{@code false} 更新失败
      */
+    @PermissionCheck(Permission.ADD_ROLE)
     @PutMapping("/")
     @Operation(summary = "更新角色")
     public R<String> update(@RequestBody @Parameter(description = "角色主键") RoleUpdateDto roleUpdateDto) {
@@ -88,6 +91,7 @@ public class RoleController {
      * @param id 角色主键
      * @return 角色详情
      */
+    @PermissionCheck(Permission.VIEW_USER_ROLE)
     @GetMapping("/info/{id}")
     @Operation(summary = "根据id获取角色详情")
     public R<RoleDetailVo> getRoleDetail(@PathVariable Long id) {
@@ -115,6 +119,7 @@ public class RoleController {
      * 所有角色
      * @return
      */
+    @PermissionCheck(Permission.VIEW_ROLE_LIST)
     @Operation(summary = "获取所有角色id、名称")
     @GetMapping("/list/all")
     public R<List<AssignRoleItemVo>> listAssignRoles() {

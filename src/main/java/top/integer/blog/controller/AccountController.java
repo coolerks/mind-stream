@@ -33,6 +33,7 @@ import top.integer.blog.utils.UserUtils;
 public class AccountController {
     private final AccountService service;
 
+    @PermissionCheck(Permission.VIEW_USER_LIST)
     @Operation(summary = "分页查询所有账户", parameters = {
             @Parameter(name = "pageNumber"),
             @Parameter(name = "pageSize"),
@@ -46,6 +47,7 @@ public class AccountController {
 
     @PostMapping("/")
     @Operation(summary = "添加用户")
+    @PermissionCheck(Permission.ADD_USER)
     public R<String> addAccount(@Validated @RequestBody AccountAddDto dto) {
         service.addAccount(dto);
         return R.ok();
@@ -60,6 +62,7 @@ public class AccountController {
 
     @PutMapping("/")
     @Operation(summary = "更新用户")
+    @PermissionCheck(Permission.EDIT_USER)
     public R<String> updateAccount(@Validated @RequestBody AccountUpdateDto dto) {
         service.updateAccount(dto);
         return R.ok();
@@ -67,6 +70,7 @@ public class AccountController {
 
     @Operation(summary = "通过id获取账户信息")
     @GetMapping("/info/{id}")
+    @PermissionCheck(Permission.VIEW_USER_DETAILS)
     public R<AccountDetailVo> getAccountById(@PathVariable Long id) {
         return R.ok(service.getAccountById(id));
     }

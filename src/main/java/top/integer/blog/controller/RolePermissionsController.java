@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.integer.blog.annotation.PermissionCheck;
+import top.integer.blog.enums.Permission;
 import top.integer.blog.model.dto.RolePermissionBatchDto;
 import top.integer.blog.model.dto.RolePermissionsDto;
 import top.integer.blog.model.dto.update.RolePermissionsUpdateDto;
@@ -34,6 +36,7 @@ public class RolePermissionsController {
     private RolePermissionsService rolePermissionsService;
 
 
+    @PermissionCheck(Permission.VIEW_ALL_PERMISSIONS)
     @GetMapping("/role/{id}")
     @Operation(summary = "获取角色已有的权限id")
     public R<List<Long>> getExistPermissionId(@PathVariable Long id) {
@@ -41,6 +44,7 @@ public class RolePermissionsController {
         return R.ok(ids);
     }
 
+    @PermissionCheck(Permission.ASSIGN_PERMISSION)
     @PostMapping("/")
     @Operation(summary = "添加权限")
     public R<String> addPermission(@RequestBody RolePermissionBatchDto dto) {
@@ -48,6 +52,7 @@ public class RolePermissionsController {
         return R.ok();
     }
 
+    @PermissionCheck(Permission.CANCEL_PERMISSION)
     @DeleteMapping("/")
     @Operation(summary = "删除权限")
     public R<String> removePermission(@RequestBody RolePermissionBatchDto dto) {

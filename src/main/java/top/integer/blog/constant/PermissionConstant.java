@@ -32,6 +32,24 @@ public class PermissionConstant {
         );
     }
 
+    public static List<Permissions> menuMangerPermissions() {
+        return List.of(
+                Permissions.of(Permission.VIEW_USER_ROLE),
+                Permissions.of(Permission.ADD_ROLE_MENU),
+                Permissions.of(Permission.CANCEL_ROLE_MENU),
+                Permissions.of(Permission.VIEW_ALL_MENUS),
+                Permissions.of(Permission.VIEW_ROLE_MENUS)
+        );
+    }
+
+    public static List<Permissions> rightsManagementPermissions() {
+        return List.of(
+                Permissions.of(Permission.VIEW_ALL_PERMISSIONS),
+                Permissions.of(Permission.ASSIGN_PERMISSION),
+                Permissions.of(Permission.CANCEL_PERMISSION)
+        );
+    }
+
     private PermissionConstant() {
     }
 }

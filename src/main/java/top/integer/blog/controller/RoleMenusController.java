@@ -8,6 +8,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.integer.blog.annotation.PermissionCheck;
+import top.integer.blog.enums.Permission;
 import top.integer.blog.model.dto.RoleMenuBatchDto;
 import top.integer.blog.model.dto.RoleMenusDto;
 import top.integer.blog.model.dto.update.RoleMenusUpdateDto;
@@ -34,6 +36,7 @@ public class RoleMenusController {
     @Autowired
     private RoleMenusService roleMenusService;
 
+    @PermissionCheck(Permission.ADD_ROLE_MENU)
     @PostMapping("/")
     @Operation(summary = "添加角色菜单")
     public R<String> addRoleMenu(@Validated @RequestBody RoleMenuBatchDto dto) {
@@ -41,6 +44,7 @@ public class RoleMenusController {
         return R.ok();
     }
 
+    @PermissionCheck(Permission.CANCEL_USER_ROLE)
     @DeleteMapping("/")
     @Operation(summary = "移除角色菜单")
     public R<String> removeRoleMenu(@Validated @RequestBody RoleMenuBatchDto dto) {
@@ -48,6 +52,7 @@ public class RoleMenusController {
         return R.ok();
     }
 
+    @PermissionCheck(Permission.VIEW_ROLE_MENUS)
     @GetMapping("/role/{id}")
     @Operation(summary = "获取某角色所有的菜单id")
     public R<List<Long>> getRoleMenuIds(@PathVariable Long id) {

@@ -23,17 +23,7 @@ public class MenuConstant {
                 .isShow(true).icon("").order(2)
                 .createTime(now).updateTime(now)
                 .build();
-        Menu permissions = Menu.builder().id(10L).parentId(5L)
-                .menuName("权限管理").description("权限信息").menuUri("/users/permission")
-                .isShow(true).icon("").order(3)
-                .createTime(now).updateTime(now)
-                .build();
-        Menu menus = Menu.builder().id(11L).parentId(5L)
-                .menuName("菜单管理").description("菜单信息").menuUri("/users/menu")
-                .isShow(true).icon("").order(4)
-                .createTime(now).updateTime(now)
-                .build();
-        return List.of(users, roles, permissions, menus);
+        return List.of(users, roles);
     }
 
     @Version(1)
