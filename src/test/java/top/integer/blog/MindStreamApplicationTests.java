@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+import top.integer.blog.file.FileManager;
+import top.integer.blog.file.support.TencentCosFileManager;
 import top.integer.blog.mapper.AccountInfoMapper;
 import top.integer.blog.mapper.AccountUserMapper;
 import top.integer.blog.model.def.AccountInfoDef;
@@ -14,6 +16,8 @@ import top.integer.blog.model.vo.MenusVo;
 import top.integer.blog.model.vo.account.info.AccountItemVo;
 import top.integer.blog.service.MenuService;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
@@ -32,6 +36,17 @@ class MindStreamApplicationTests {
     AccountUserMapper accountUserMapper;
     @Autowired
     MenuService menuService;
+    @Autowired
+    List<FileManager> fileManagers;
+
+//    @Test
+//    void cosTest() throws FileNotFoundException {
+//        for (FileManager fileManager : fileManagers) {
+//            boolean upload = fileManager.upload(FileManager.getFilePath("997948.jpg"),
+//                    new FileInputStream("C:\\Users\\singx\\OneDrive\\图片\\Saved Pictures\\997948.jpg"));
+//            System.out.println("upload = " + upload);
+//        }
+//    }
 
     @Test
     void contextLoads() {

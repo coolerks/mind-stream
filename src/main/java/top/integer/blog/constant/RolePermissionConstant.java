@@ -31,8 +31,8 @@ public class RolePermissionConstant {
     public static List<RolePermissions> initSuperAdminPermission2() {
         return List.of(
                 RolePermissions.of(1L, Permission.VIEW_ALL_PERMISSIONS),
-                RolePermissions.of(2L, Permission.ASSIGN_PERMISSION),
-                RolePermissions.of(3L, Permission.CANCEL_PERMISSION)
+                RolePermissions.of(1L, Permission.ASSIGN_PERMISSION),
+                RolePermissions.of(1L, Permission.CANCEL_PERMISSION)
         );
     }
 

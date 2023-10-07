@@ -126,3 +126,41 @@ CREATE TABLE `ums_role_permissions`
     KEY `idx_role_menu_id` (`role_id`, `permissions_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='角色-权限';
+
+
+create table `fms_folder`
+(
+    `id`          int unsigned NOT NULL AUTO_INCREMENT primary key COMMENT '自增id',
+    `parent_id`   int unsigned NOT NULL COMMENT '父文件夹id',
+    `user_id`     int unsigned NOT NULL COMMENT '用户id',
+    `name`        varchar(32)  NOT NULL DEFAULT '' COMMENT '文件夹名称',
+    `description` varchar(255) NOT NULL DEFAULT '' COMMENT '文件夹描述',
+    `full_path`   varchar(255) NOT NULL comment '完整路径',
+    `create_time` datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `update_time` datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `create_ip`   int unsigned not null default 0 comment '创建者ip',
+    unique key uk_full_path (`full_path`),
+    key idx_parent_id (`parent_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='文件夹';
+
+drop table `fms_files`;
+
+create table `fms_files`
+(
+    `id`            int unsigned NOT NULL AUTO_INCREMENT primary key COMMENT '自增id',
+    `folder_id`     int unsigned NOT NULL default 0 COMMENT '文件夹id',
+    `user_id`       int unsigned NOT NULL COMMENT '用户id',
+    `name`          varchar(128) NOT NULL DEFAULT '' COMMENT '文件名',
+    `full_path`     varchar(255) NOT NULL comment '存储的完整路径',
+    `size`          int unsigned not null default 0 comment '文件大小',
+    `compress_path` varchar(255) NOT NULL default '' comment '压缩的文件路径',
+    `status`        tinyint(1)   not null default 3 comment '文件状态',
+    `policy`        tinyint(1)   not null default 0 comment '存储策略',
+    `create_time`   datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `update_time`   datetime     NOT NULL DEFAULT current_timestamp COMMENT '更新时间',
+    `create_ip`     int unsigned not null default 0 comment '创建者ip',
+    unique key uk_full_path (`full_path`),
+    key idx_parent_id (`folder_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='文件';
