@@ -8,4 +8,42 @@
             #{item}
         </foreach>
     </update>
+    <select id="pageFiles" resultType="top.integer.blog.model.vo.file.FileItemVo">
+        select id,
+               folder_id parent_id,
+               name,
+               full_path,
+               compress_path,
+               false folder,
+               create_time,
+               policy
+        from fms_files
+        where folder_id = #{folderId}
+        union all
+        select id,
+               parent_id,
+               name,
+               full_path path,
+               '' compress_path,
+               true folder,
+               create_time,
+               -1 policy
+        from fms_folder
+        where parent_id = #{folderId}
+        order by folder desc , name
+        limit ${pageOffset}, ${pageSize}
+    </select>
+
+    <select id="pageFiles_COUNT" resultType="long">
+        select count(*) from
+        (
+            select id
+            from fms_files
+            where folder_id = #{folderId}
+            union all
+            select id
+            from fms_folder
+            where parent_id = #{folderId}
+        ) t
+    </select>
 </mapper>

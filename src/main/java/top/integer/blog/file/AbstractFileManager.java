@@ -60,4 +60,9 @@ public abstract class AbstractFileManager implements FileManager {
         this.filesMapper = filesMapper;
         this.folderMapper = folderMapper;
     }
+
+    @Override
+    public String getDownloadUrl(String path) {
+        return objectStorage.getDomain() + "/" + path;
+    }
 }

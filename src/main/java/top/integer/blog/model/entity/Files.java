@@ -78,7 +78,7 @@ public class Files implements Serializable {
      * 存储策略
      */
     @Schema(description = "存储策略")
-    private int policy;
+    private Integer policy;
 
     /**
      * 创建时间

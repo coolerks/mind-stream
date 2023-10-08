@@ -1,7 +1,10 @@
 package top.integer.blog.service.impl;
 
+import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,33 +13,41 @@ import top.integer.blog.enums.FileStatus;
 import top.integer.blog.exception.DataException;
 import top.integer.blog.file.FileManager;
 import top.integer.blog.file.FileManagers;
+import top.integer.blog.file.ImageUpload;
 import top.integer.blog.mapper.FilesMapper;
 import top.integer.blog.mapper.FolderMapper;
 import top.integer.blog.model.def.FilesDef;
 import top.integer.blog.model.def.FolderDef;
+import top.integer.blog.model.dto.FilePageQueryDto;
 import top.integer.blog.model.dto.FileUploadDto;
 import top.integer.blog.model.dto.FolderDto;
 import top.integer.blog.model.entity.Files;
 import top.integer.blog.model.entity.Folder;
+import top.integer.blog.model.vo.PageVo;
+import top.integer.blog.model.vo.file.FileItemVo;
 import top.integer.blog.model.vo.file.upload.UploadRequestResponseVo;
 import top.integer.blog.properties.ObjectStorage;
 import top.integer.blog.service.FileService;
 import top.integer.blog.utils.IpUtils;
 import top.integer.blog.utils.UserUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FileServiceImpl implements FileService, InitializingBean {
     private final FileManagers fileManagers;
     private final FilesMapper filesMapper;
     private final FolderMapper folderMapper;
     private FileManager fileManager;
     private ObjectStorage objectStorage;
+    private ImageUpload imageUpload;
 
 
     public Map<String, String> getObjectStorageConfig() {
@@ -84,20 +95,32 @@ public class FileServiceImpl implements FileService, InitializingBean {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public Long upload(MultipartFile multipartFile, FileUploadDto dto) {
+        log.info("准备上传文件");
         Files files = getFiles(dto);
-        try {
-            filesMapper.insert(files);
-            if (!fileManager.upload(files.getFullPath(), multipartFile.getInputStream())) {
-                throw new DataException("上传失败");
+        try (
+                InputStream inputStream = multipartFile.getInputStream();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ) {
+            byte[] bytes = new byte[1024];
+            int len;
+            while ((len = inputStream.read(bytes)) != -1) {
+                byteArrayOutputStream.write(bytes, 0, len);
             }
-            // todo 压缩图片
+            byteArrayOutputStream.flush();
+            log.info("读取资源成功");
 
+            files.setCompressPath(FileManager.getFilePath(dto.getName()));
+            imageUpload.uploadCompressedImage(files.getCompressPath(), byteArrayOutputStream);
+            imageUpload.uploadOriginalImage(files.getFullPath(), byteArrayOutputStream);
+
+            this.filesMapper.insert(files);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         this.uploadComplete(files.getId());
         return files.getId();
     }
+
 
     @Override
     public void mkdir(FolderDto dto) {
@@ -128,6 +151,16 @@ public class FileServiceImpl implements FileService, InitializingBean {
         }
 
         this.folderMapper.insert(folder);
+    }
+
+    @Override
+    public PageVo<FileItemVo> pageFiles(FilePageQueryDto dto) {
+        Page<FileItemVo> page = new Page<>(dto.getPageNumber(), dto.getPageSize());
+        this.filesMapper.xmlPaginate("pageFiles", page, Map.of("folderId", dto.getFolderId()));
+        page.getRecords().stream()
+                .filter(it -> StringUtils.isNotBlank(it.getCompressPath()))
+                .forEach(it -> it.setCompressPath(fileManagers.getFileManager(it.getPolicy()).getDownloadUrl(it.getCompressPath())));
+        return PageVo.of(page);
     }
 
     /**
@@ -212,5 +245,6 @@ public class FileServiceImpl implements FileService, InitializingBean {
     public void afterPropertiesSet() throws Exception {
         this.fileManager = fileManagers.getFileManager();
         this.objectStorage = fileManagers.getObjectStorage();
+        this.imageUpload = new ImageUpload(this.fileManager);
     }
 }

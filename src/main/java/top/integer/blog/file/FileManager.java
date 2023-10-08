@@ -74,6 +74,13 @@ public interface FileManager {
      */
     void deleteInvalidFile();
 
+    /**
+     * 获取下载直链
+     * @param path 路径
+     * @return 直链
+     */
+    String getDownloadUrl(String path);
+
 
     static String getFilePath(String name) {
         String[] split = name.split("\\.");
