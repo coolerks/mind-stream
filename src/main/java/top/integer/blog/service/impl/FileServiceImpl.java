@@ -157,6 +157,10 @@ public class FileServiceImpl implements FileService, InitializingBean {
     public PageVo<FileItemVo> pageFiles(FilePageQueryDto dto) {
         Page<FileItemVo> page = new Page<>(dto.getPageNumber(), dto.getPageSize());
         this.filesMapper.xmlPaginate("pageFiles", page, Map.of("folderId", dto.getFolderId()));
+        page.getRecords()
+                .stream()
+                .filter(it -> !it.getFolder())
+                .forEach(it -> it.setFullPath(fileManagers.getFileManager(it.getPolicy()).getDownloadUrl(it.getFullPath())));
         page.getRecords().stream()
                 .filter(it -> StringUtils.isNotBlank(it.getCompressPath()))
                 .forEach(it -> it.setCompressPath(fileManagers.getFileManager(it.getPolicy()).getDownloadUrl(it.getCompressPath())));

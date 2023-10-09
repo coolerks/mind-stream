@@ -14,23 +14,24 @@
                name,
                full_path,
                compress_path,
-               false folder,
+               false     folder,
                create_time,
                policy
         from fms_files
         where folder_id = #{folderId}
+          and status = 1
         union all
         select id,
                parent_id,
                name,
                full_path path,
-               '' compress_path,
-               true folder,
+               ''        compress_path,
+               true      folder,
                create_time,
-               -1 policy
+               -1        policy
         from fms_folder
         where parent_id = #{folderId}
-        order by folder desc , name
+        order by folder desc, name
         limit ${pageOffset}, ${pageSize}
     </select>
 

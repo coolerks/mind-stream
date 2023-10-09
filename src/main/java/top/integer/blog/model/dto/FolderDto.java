@@ -11,11 +11,12 @@ import org.hibernate.validator.constraints.Length;
 public class FolderDto {
     @NotNull(message = "父id不能为空")
     private Long parentId;
+
     @NotNull(message = "名称不能为空")
     @Length(min = 1, max = 32)
     private String name;
+
     @NotNull(message = "描述信息不能为空")
-    @Length(min = 1, max = 255)
-    @NotBlank(message = "描述信息不能为空")
+    @Length(max = 255, message = "描述信息最长为255字符")
     private String description;
 }
