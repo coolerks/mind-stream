@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 import top.integer.blog.model.dto.FilePageQueryDto;
 import top.integer.blog.model.dto.FileUploadDto;
 import top.integer.blog.model.dto.FolderDto;
+import top.integer.blog.model.vo.file.FileDetailVo;
 import top.integer.blog.model.vo.file.FileItemVo;
 import top.integer.blog.model.vo.PageVo;
 import top.integer.blog.model.vo.file.upload.UploadRequestResponseVo;
@@ -23,4 +24,6 @@ public interface FileService {
     void mkdir(FolderDto dto);
 
     PageVo<FileItemVo> pageFiles(FilePageQueryDto dto);
+
+    FileDetailVo getDetail(Long id);
 }

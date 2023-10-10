@@ -27,6 +27,19 @@ public class RoleMenuConstant {
         return roleMenus;
     }
 
+    public static List<RoleMenus> initSuperAdminFileMenus() {
+        LocalDateTime now = LocalDateTime.now();
+
+        RoleMenus.RoleMenusBuilder roleMenusBuilder = RoleMenus.builder()
+                .roleId(1L)
+                .createTime(now)
+                .createBy(1001L)
+                .createIp(2130706433L);
+        return MenuConstant.fileMenus().stream()
+                .map(it -> roleMenusBuilder.menuId(it.getId()).build())
+                .toList();
+    }
+
     private RoleMenuConstant() {
 
     }

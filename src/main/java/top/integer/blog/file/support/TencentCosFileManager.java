@@ -99,6 +99,11 @@ public class TencentCosFileManager extends AbstractFileManager {
         return FileStorageStrategy.TENCENT_CLOUD.code == code;
     }
 
+    @Override
+    public ObjectStorage getObjectStorage() {
+        return objectStorage;
+    }
+
     private COSClient createCosClient(ObjectStorage objectStorage) {
         COSCredentials cred = new BasicCOSCredentials(objectStorage.getAccessKey(), objectStorage.getSecretKey());
         ClientConfig clientConfig = new ClientConfig();

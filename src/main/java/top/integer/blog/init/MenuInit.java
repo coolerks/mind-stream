@@ -27,4 +27,11 @@ public class MenuInit implements Init {
         log.info("新增根菜单和用户菜单成功");
     }
 
+    @Version(3)
+    private void version3() {
+        List<Menu> menus = MenuConstant.fileMenus();
+        this.mapper.insertBatch(menus);
+        log.info("新增附件子菜单成功");
+    }
+
 }

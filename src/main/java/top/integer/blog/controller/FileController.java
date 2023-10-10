@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import top.integer.blog.model.dto.FilePageQueryDto;
 import top.integer.blog.model.dto.FileUploadDto;
 import top.integer.blog.model.dto.FolderDto;
+import top.integer.blog.model.vo.file.FileDetailVo;
 import top.integer.blog.model.vo.file.FileItemVo;
 import top.integer.blog.model.vo.PageVo;
 import top.integer.blog.model.vo.R;
@@ -74,4 +75,10 @@ public class FileController {
         return R.ok(page);
     }
 
+    @Operation(summary = "查看文件详情")
+    @GetMapping("/detail/{id}")
+    public R<FileDetailVo> fileDetail(@PathVariable Long id) {
+        FileDetailVo detail = fileService.getDetail(id);
+        return R.ok(detail);
+    }
 }

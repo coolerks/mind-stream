@@ -1,6 +1,7 @@
 package top.integer.blog.operation;
 
 import top.integer.blog.enums.Permission;
+import top.integer.blog.model.vo.account.AccountVo;
 
 import java.util.List;
 import java.util.Set;
@@ -21,5 +22,12 @@ public interface AccountOperation {
      * @return 存在/不存在
      */
     Set<Long> existAccount(List<Long> ids);
+
+    /**
+     * 获取账户
+     * @param id
+     * @return
+     */
+    AccountVo getAccount(Long id);
 
 }

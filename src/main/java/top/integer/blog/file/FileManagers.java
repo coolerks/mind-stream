@@ -33,6 +33,10 @@ public class FileManagers implements InitializingBean {
         return currentFileManager;
     }
 
+    public ObjectStorage getObjectStorage(int policy) {
+        return getFileManager(policy).getObjectStorage();
+    }
+
     public FileManager getFileManager(int code) {
         return fileManagers.stream()
                 .filter(it -> it.isSupport(code))

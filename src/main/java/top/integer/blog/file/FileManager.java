@@ -2,6 +2,7 @@ package top.integer.blog.file;
 
 import top.integer.blog.enums.FileStorageStrategy;
 import top.integer.blog.model.vo.file.upload.UploadRequestResponseVo;
+import top.integer.blog.properties.ObjectStorage;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -81,6 +82,7 @@ public interface FileManager {
      */
     String getDownloadUrl(String path);
 
+    ObjectStorage getObjectStorage();
 
     static String getFilePath(String name) {
         String[] split = name.split("\\.");

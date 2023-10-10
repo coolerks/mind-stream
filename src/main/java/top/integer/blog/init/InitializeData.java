@@ -21,7 +21,7 @@ public class InitializeData implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         // todo 读取数据库中的版本号
-        int currentVersion = 2;
+        int currentVersion = 3;
         for (Init init : initComponent) {
             init.doInit(currentVersion);
         }

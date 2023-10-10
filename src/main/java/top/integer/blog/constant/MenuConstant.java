@@ -10,6 +10,21 @@ import java.util.List;
  * 菜单常量类
  */
 public class MenuConstant {
+    public static List<Menu> fileMenus() {
+        LocalDateTime now = LocalDateTime.now();
+        Menu allFiles = Menu.builder().id(10L).parentId(4L)
+                .menuName("全部文件").description("全部文件").menuUri("/file/list")
+                .isShow(true).icon("").order(1)
+                .createTime(now).updateTime(now)
+                .build();
+        Menu imageManager = Menu.builder().id(11L).parentId(4L)
+                .menuName("图片管理").description("管理图片").menuUri("/file/image")
+                .isShow(true).icon("").order(2)
+                .createTime(now).updateTime(now)
+                .build();
+        return List.of(allFiles, imageManager);
+    }
+
     @Version(1)
     public static List<Menu> userMenus() {
         LocalDateTime now = LocalDateTime.now();

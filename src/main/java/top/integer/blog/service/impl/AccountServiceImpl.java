@@ -21,6 +21,7 @@ import top.integer.blog.model.dto.update.AccountUpdateDto;
 import top.integer.blog.model.entity.AccountInfo;
 import top.integer.blog.model.entity.AccountUser;
 import top.integer.blog.model.vo.PageVo;
+import top.integer.blog.model.vo.account.AccountVo;
 import top.integer.blog.model.vo.account.info.AccountDetailVo;
 import top.integer.blog.model.vo.account.info.AccountItemVo;
 import top.integer.blog.operation.AccountEnsureOperation;
@@ -170,6 +171,23 @@ public class AccountServiceImpl implements AccountService {
                 .from(u)
                 .where(u.ID.in(list));
         return mapper.selectListByQuery(queryWrapper).stream().map(AccountUser::getId).collect(Collectors.toSet());
+    }
+
+    @Override
+    public AccountVo getAccount(Long id) {
+        AccountInfoDef i = AccountInfoDef.ACCOUNT_INFO;
+        AccountUserDef u = AccountUserDef.ACCOUNT_USER;
+        QueryWrapper wrapper = QueryWrapper.create()
+                .select(u.ID, u.EMAIL, i.NICKNAME, u.USERNAME, i.AVATAR)
+                .from(u)
+                .join(i)
+                .on(u.ID.eq(i.ID))
+                .where(u.ID.eq(id));
+        AccountVo accountVo = this.mapper.selectOneByQueryAs(wrapper, AccountVo.class);
+        if (accountVo == null) {
+            throw new DataException("用户不存在");
+        }
+        return accountVo;
     }
 
 }

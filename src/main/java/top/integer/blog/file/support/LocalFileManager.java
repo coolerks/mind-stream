@@ -41,6 +41,11 @@ public class LocalFileManager extends AbstractFileManager {
         return FileStorageStrategy.LOCAL.code == code;
     }
 
+    @Override
+    public ObjectStorage getObjectStorage() {
+        return null;
+    }
+
     public LocalFileManager(ObjectStorage objectStorage, FilesMapper filesMapper, FolderMapper folderMapper) {
         super(objectStorage, filesMapper, folderMapper);
     }

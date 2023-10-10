@@ -24,8 +24,11 @@ import top.integer.blog.model.dto.FolderDto;
 import top.integer.blog.model.entity.Files;
 import top.integer.blog.model.entity.Folder;
 import top.integer.blog.model.vo.PageVo;
+import top.integer.blog.model.vo.account.AccountVo;
+import top.integer.blog.model.vo.file.FileDetailVo;
 import top.integer.blog.model.vo.file.FileItemVo;
 import top.integer.blog.model.vo.file.upload.UploadRequestResponseVo;
+import top.integer.blog.operation.AccountOperation;
 import top.integer.blog.properties.ObjectStorage;
 import top.integer.blog.service.FileService;
 import top.integer.blog.utils.IpUtils;
@@ -45,6 +48,7 @@ public class FileServiceImpl implements FileService, InitializingBean {
     private final FileManagers fileManagers;
     private final FilesMapper filesMapper;
     private final FolderMapper folderMapper;
+    private final AccountOperation accountOperation;
     private FileManager fileManager;
     private ObjectStorage objectStorage;
     private ImageUpload imageUpload;
@@ -63,6 +67,9 @@ public class FileServiceImpl implements FileService, InitializingBean {
     @Override
     public UploadRequestResponseVo uploadRequest(FileUploadDto dto) {
         Files files = getFiles(dto);
+        if (dto.getFolderId() == 2) {
+            throw new DataException("不支持在此文件夹内上传非图片文件");
+        }
         filesMapper.insert(files);
         return fileManager.requestUpload(files.getFullPath(), "http://localhost:8080?id=" + files.getId(), 5);
     }
@@ -165,6 +172,33 @@ public class FileServiceImpl implements FileService, InitializingBean {
                 .filter(it -> StringUtils.isNotBlank(it.getCompressPath()))
                 .forEach(it -> it.setCompressPath(fileManagers.getFileManager(it.getPolicy()).getDownloadUrl(it.getCompressPath())));
         return PageVo.of(page);
+    }
+
+    @Override
+    public FileDetailVo getDetail(Long id) {
+        Files files = this.filesMapper.selectOneById(id);
+        FileManager manager = fileManagers.getFileManager(files.getPolicy());
+        ObjectStorage os = fileManagers.getObjectStorage(files.getPolicy());
+        AccountVo account = accountOperation.getAccount(files.getUserId());
+
+
+        FileDetailVo.FileDetailVoBuilder builder = FileDetailVo.builder()
+                .id(files.getId())
+                .userId(files.getUserId())
+                .name(files.getName())
+                .fullPath(files.getFullPath())
+                .compressPath(files.getCompressPath())
+                .policy(os.getMode().mode)
+                .createTime(files.getCreateTime())
+                .user(account);
+
+        if (StringUtils.isNotBlank(files.getCompressPath())) {
+            builder.compressLink(manager.getDownloadUrl(files.getCompressPath()));
+        }
+
+        return builder.downloadLink(manager.getDownloadUrl(files.getFullPath()))
+                .size(files.getSize())
+                .build();
     }
 
     /**
