@@ -80,4 +80,5 @@ public class AccountController {
     public R<AccountDetailVo> getLoginUserDetail() {
         return getAccountById(UserUtils.getUserId());
     }
+
 }

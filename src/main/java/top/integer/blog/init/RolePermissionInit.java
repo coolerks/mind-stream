@@ -31,4 +31,11 @@ public class RolePermissionInit implements Init {
         log.info("新增超级管理员授权的权限成功");
     }
 
+    @Version(4)
+    private void version4() {
+        List<RolePermissions> rolePermissions = RolePermissionConstant.initSuperAdminPermission3();
+        mapper.insertBatch(rolePermissions);
+        log.info("新增超级管理员文件权限成功");
+    }
+
 }

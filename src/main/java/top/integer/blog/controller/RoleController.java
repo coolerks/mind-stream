@@ -127,4 +127,13 @@ public class RoleController {
         return R.ok(result);
     }
 
+    @Operation(summary = "删除角色", parameters = {
+            @Parameter(name = "id")
+    })
+    @DeleteMapping("/")
+    public R<String> deleteRole(Long id) {
+        roleService.deleteRole(id);
+        return R.ok();
+    }
+
 }

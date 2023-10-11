@@ -4,8 +4,10 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import top.integer.blog.event.RoleEvent;
 import top.integer.blog.exception.DataException;
 import top.integer.blog.mapper.UserRolesMapper;
 import top.integer.blog.model.Pair;
@@ -143,6 +145,21 @@ public class UserRolesServiceImpl extends ServiceImpl<UserRolesMapper, UserRoles
                 .stream()
                 .map(UserRoles::getRoleId)
                 .toList();
+    }
+
+    @Override
+    @EventListener
+    public void roleEventHandler(RoleEvent event) {
+        Long id = event.getObject().getId();
+
+        UserRolesDef ur = UserRolesDef.USER_ROLES;
+        QueryWrapper wrapper = QueryWrapper.create()
+                .from(ur)
+                .where(ur.ROLE_ID.eq(id));
+        this.mapper.deleteByQuery(wrapper);
+
+        String key = rolePrefix + id;
+        template.delete(key);
     }
 
     @Override

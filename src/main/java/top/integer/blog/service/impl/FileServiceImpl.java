@@ -18,6 +18,7 @@ import top.integer.blog.mapper.FilesMapper;
 import top.integer.blog.mapper.FolderMapper;
 import top.integer.blog.model.def.FilesDef;
 import top.integer.blog.model.def.FolderDef;
+import top.integer.blog.model.dto.FileDeleteDto;
 import top.integer.blog.model.dto.FilePageQueryDto;
 import top.integer.blog.model.dto.FileUploadDto;
 import top.integer.blog.model.dto.FolderDto;
@@ -38,6 +39,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -140,6 +142,10 @@ public class FileServiceImpl implements FileService, InitializingBean {
             throw new DataException("父文件夹不存在");
         }
 
+        if (dto.getParentId() == 2) {
+            throw new DataException("当前文件夹下不允许创建文件夹");
+        }
+
         String fullPath = dto.getParentId() == 0L ? "/" + dto.getName() : parent.getFullPath() + "/" + dto.getName();
 
         Folder folder = Folder.builder()
@@ -199,6 +205,22 @@ public class FileServiceImpl implements FileService, InitializingBean {
         return builder.downloadLink(manager.getDownloadUrl(files.getFullPath()))
                 .size(files.getSize())
                 .build();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public void deleteFile(FileDeleteDto dto) {
+        List<Long> fileId = dto.getFileId();
+        List<Long> folderId = dto.getFolderId();
+        if (fileId != null && !fileId.isEmpty()) {
+            this.filesMapper.deleteBatchByIds(fileId);
+        }
+        if (folderId != null && !folderId.isEmpty()) {
+            if (folderId.contains(2L)) {
+                throw new DataException("不允许删除图片文件夹");
+            }
+            this.folderMapper.deleteBatchByIds(folderId);
+        }
     }
 
     /**

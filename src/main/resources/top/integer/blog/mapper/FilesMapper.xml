@@ -31,7 +31,12 @@
                -1        policy
         from fms_folder
         where parent_id = #{folderId}
-        order by folder desc, name
+        <if test="folderId == 2">
+            order by create_time desc
+        </if>
+        <if test="folderId != 2">
+            order by folder desc, name
+        </if>
         limit ${pageOffset}, ${pageSize}
     </select>
 

@@ -1,6 +1,7 @@
 package top.integer.blog.service;
 
 import com.mybatisflex.core.service.IService;
+import top.integer.blog.event.RoleEvent;
 import top.integer.blog.model.dto.PageQueryDto;
 import top.integer.blog.model.dto.UserRoleBatchDto;
 import top.integer.blog.model.entity.UserRoles;
@@ -28,4 +29,6 @@ public interface UserRolesService extends IService<UserRoles>, UserRoleOperation
     void deleteBatch(UserRoleBatchDto dto);
 
     List<Long> listUserRoleIds(Long id);
+
+    void roleEventHandler(RoleEvent event);
 }

@@ -3,14 +3,17 @@ package top.integer.blog.service.impl;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import top.integer.blog.enums.Permission;
+import top.integer.blog.event.RoleEvent;
 import top.integer.blog.exception.DataException;
 import top.integer.blog.mapper.RolePermissionsMapper;
 import top.integer.blog.model.Pair;
 import top.integer.blog.model.def.RolePermissionsDef;
 import top.integer.blog.model.dto.RolePermissionBatchDto;
+import top.integer.blog.model.entity.Role;
 import top.integer.blog.model.entity.RolePermissions;
 import top.integer.blog.operation.PermissionsOperation;
 import top.integer.blog.operation.RoleOperation;
@@ -112,6 +115,23 @@ public class RolePermissionsServiceImpl extends ServiceImpl<RolePermissionsMappe
                 .toList();
         mapper.removeBatch(ids);
         template.delete(permissionPrefix + roleId);
+    }
+
+    @Override
+    @EventListener
+    public void roleEventHandler(RoleEvent event) {
+        RolePermissionsDef rp = RolePermissionsDef.ROLE_PERMISSIONS;
+        Role role = event.getObject();
+        Long id = role.getId();
+
+        QueryWrapper wrapper = QueryWrapper.create()
+                .from(rp)
+                .where(rp.ROLE_ID.eq(id));
+
+        this.mapper.deleteByQuery(wrapper);
+
+        String key = permissionPrefix + id;
+        template.delete(key);
     }
 
     @Override

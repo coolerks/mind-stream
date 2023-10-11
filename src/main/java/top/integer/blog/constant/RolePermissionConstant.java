@@ -36,6 +36,15 @@ public class RolePermissionConstant {
         );
     }
 
+    public static List<RolePermissions> initSuperAdminPermission3() {
+        return List.of(
+                RolePermissions.of(1L, Permission.UPLOAD_FILE),
+                RolePermissions.of(1L, Permission.CREATE_FOLDER),
+                RolePermissions.of(1L, Permission.DELETE_FILE),
+                RolePermissions.of(1L, Permission.GET_FILE_LIST)
+        );
+    }
+
 
     private RolePermissionConstant() {
 

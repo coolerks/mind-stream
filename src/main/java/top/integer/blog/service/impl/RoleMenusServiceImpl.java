@@ -3,6 +3,8 @@ package top.integer.blog.service.impl;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
+import top.integer.blog.event.RoleEvent;
 import top.integer.blog.exception.DataException;
 import top.integer.blog.mapper.MenuMapper;
 import top.integer.blog.model.Pair;
@@ -97,5 +99,16 @@ public class RoleMenusServiceImpl extends ServiceImpl<RoleMenusMapper, RoleMenus
                 .on(m.ID.eq(rm.MENU_ID))
                 .where(rm.ROLE_ID.eq(id));
         return this.menuMapper.selectListByQuery(wrapper).stream().map(Menu::getId).toList();
+    }
+
+    @Override
+    @EventListener
+    public void roleEventHandler(RoleEvent event) {
+        Long id = event.getObject().getId();
+        RoleMenusDef rm = RoleMenusDef.ROLE_MENUS;
+        QueryWrapper wrapper = QueryWrapper.create()
+                .from(rm)
+                .where(rm.ROLE_ID.eq(id));
+        this.mapper.deleteByQuery(wrapper);
     }
 }

@@ -1,6 +1,7 @@
 package top.integer.blog.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import top.integer.blog.model.dto.FileDeleteDto;
 import top.integer.blog.model.dto.FilePageQueryDto;
 import top.integer.blog.model.dto.FileUploadDto;
 import top.integer.blog.model.dto.FolderDto;
@@ -26,4 +27,6 @@ public interface FileService {
     PageVo<FileItemVo> pageFiles(FilePageQueryDto dto);
 
     FileDetailVo getDetail(Long id);
+
+    void deleteFile(FileDeleteDto dto);
 }

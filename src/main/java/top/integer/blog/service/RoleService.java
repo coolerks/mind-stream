@@ -29,4 +29,5 @@ public interface RoleService extends IService<Role>, RoleOperation {
 
     List<AssignRoleItemVo> listAssignRoles();
 
+    void deleteRole(Long id);
 }

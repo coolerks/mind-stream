@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.integer.blog.enums.Permission;
+import top.integer.blog.event.AccountEvent;
 import top.integer.blog.exception.DataException;
 import top.integer.blog.mapper.AccountInfoMapper;
 import top.integer.blog.mapper.AccountUserMapper;
@@ -28,6 +29,7 @@ import top.integer.blog.operation.AccountEnsureOperation;
 import top.integer.blog.operation.RolePermissionOperation;
 import top.integer.blog.operation.UserRoleOperation;
 import top.integer.blog.service.AccountService;
+import top.integer.blog.service.Publisher;
 import top.integer.blog.utils.BeanUtil;
 import top.integer.blog.utils.IpUtils;
 import top.integer.blog.utils.JwtUtils;
@@ -127,7 +129,9 @@ public class AccountServiceImpl implements AccountService {
         AccountInfo accountInfo = BeanUtil.copy(dto, new AccountInfo());
         AccountUser accountUser = BeanUtil.copy(dto, new AccountUser());
 
-        accountEnsureOperation.ensureExistSuperAdmin(dto.getId());
+        if (dto.getStatus() != null && dto.getStatus() == 0) {
+            accountEnsureOperation.ensureExistSuperAdmin(dto.getId());
+        }
 
         mapper.update(accountUser);
         accountInfoMapper.update(accountInfo);
@@ -158,6 +162,7 @@ public class AccountServiceImpl implements AccountService {
         );
         return JwtUtils.createToken(accountUser.getId());
     }
+
 
     @Override
     public Set<Long> existAccount(List<Long> ids) {

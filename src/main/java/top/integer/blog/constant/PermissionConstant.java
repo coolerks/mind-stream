@@ -50,6 +50,15 @@ public class PermissionConstant {
         );
     }
 
+    public static List<Permissions> filesPermissions() {
+        return List.of(
+                Permissions.of(Permission.UPLOAD_FILE),
+                Permissions.of(Permission.CREATE_FOLDER),
+                Permissions.of(Permission.DELETE_FILE),
+                Permissions.of(Permission.GET_FILE_LIST)
+        );
+    }
+
     private PermissionConstant() {
     }
 }

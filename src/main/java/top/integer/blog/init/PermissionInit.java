@@ -33,4 +33,10 @@ public class PermissionInit implements Init {
         mapper.insertBatch(PermissionConstant.rightsManagementPermissions());
         log.info("初始化权限管理相关权限成功");
     }
+
+    @Version(4)
+    public void version4() {
+        mapper.insertBatch(PermissionConstant.filesPermissions());
+        log.info("初始化文件权限成功");
+    }
 }

@@ -35,7 +35,7 @@ public class ImageUpload {
 
         try (byteArrayInputStream) {
             Thumbnails.of(byteArrayInputStream)
-                    .scale(1f)
+                    .scale(0.5f)
                     .outputQuality(0.5f)
                     .toOutputStream(compressed);
             compressed.flush();

@@ -1,6 +1,7 @@
 package top.integer.blog.service;
 
 import com.mybatisflex.core.service.IService;
+import top.integer.blog.event.RoleEvent;
 import top.integer.blog.model.dto.RolePermissionBatchDto;
 import top.integer.blog.model.entity.RolePermissions;
 import top.integer.blog.operation.RolePermissionOperation;
@@ -20,4 +21,6 @@ public interface RolePermissionsService extends IService<RolePermissions>, RoleP
     void addPermission(RolePermissionBatchDto dto);
 
     void removePermission(RolePermissionBatchDto dto);
+
+    void roleEventHandler(RoleEvent event);
 }

@@ -36,7 +36,14 @@ public enum Permission {
      */
     VIEW_ALL_PERMISSIONS(17, "view_all_permissions", "查看所有权限"),
     ASSIGN_PERMISSION(18, "assign_permission", "分配权限"),
-    CANCEL_PERMISSION(19, "cancel_permission", "取消权限");
+    CANCEL_PERMISSION(19, "cancel_permission", "取消权限"),
+    /**
+     * 文件管理相关权限
+     */
+    UPLOAD_FILE(20, "upload_file", "上传文件"),
+    CREATE_FOLDER(21, "create_folder", "创建文件夹"),
+    DELETE_FILE(22, "delete_file", "删除文件"),
+    GET_FILE_LIST(23, "get_file_list", "获取文件列表");
 
     /**
      * id

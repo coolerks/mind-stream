@@ -5,6 +5,8 @@ import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import top.integer.blog.event.RoleEvent;
 import top.integer.blog.exception.BizException;
 import top.integer.blog.exception.DataException;
 import top.integer.blog.model.def.RoleDef;
@@ -16,6 +18,7 @@ import top.integer.blog.model.vo.PageVo;
 import top.integer.blog.model.vo.role.AssignRoleItemVo;
 import top.integer.blog.model.vo.role.RoleDetailVo;
 import top.integer.blog.model.vo.role.RoleItemVo;
+import top.integer.blog.service.Publisher;
 import top.integer.blog.service.RoleService;
 import org.springframework.stereotype.Service;
 import top.integer.blog.utils.UserUtils;
@@ -93,6 +96,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 .select(r.ID, r.NAME)
                 .from(r);
         return this.listAs(wrapper, AssignRoleItemVo.class);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public void deleteRole(Long id) {
+        if (id == 1) {
+            throw new DataException("超级管理员不允许被删除");
+        }
+        Role role = this.mapper.selectOneById(id);
+        if (role != null) {
+            Publisher.publisher.publishEvent(new RoleEvent(role));
+        }
+        this.mapper.deleteById(id);
     }
 
     @Override

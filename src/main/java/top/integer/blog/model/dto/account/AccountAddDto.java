@@ -25,13 +25,13 @@ public class AccountAddDto {
     @NotBlank(message = "昵称不为空")
     private String nickname;
 
-//    /**
-//     * 头像(路径)
-//     */
-//    @Schema(description = "头像(路径)")
-//    @Length(min = 1, max = 255, message = "头像1-30个字符")
-//    @NotBlank(message = "头像不为空")
-//    private String avatar;
+    /**
+     * 头像(路径)
+     */
+    @Schema(description = "头像(路径)")
+    @Length(min = 1, max = 255, message = "头像1-30个字符")
+    @NotBlank(message = "头像不为空")
+    private String avatar;
 
     /**
      * 性别
