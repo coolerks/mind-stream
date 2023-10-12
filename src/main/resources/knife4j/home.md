@@ -4,25 +4,26 @@
     </a>
 </p>
 
-<p align="center"><b>MindStream</b>是一款强大的博客系统</p>
+<p align="center"><b>MindStream</b>是一款强大的用户系统</p>
 
 <p align="center">
 <br />
 <a href="https://mindstream.integer.top">官网</a>
-<a href="https://doc.mindstream.top">文档</a>
-<a href="https://github.com">GitHub</a>
-<a href="https://gitee.com">Gitee</a>
+<a href="https://mindstream.integer.top">文档</a>
+<a href="https://github.com/coolerks/mind-stream">GitHub</a>
 </p>
 
 ------------------------------
 
 ## 快速开始
+> 需要提前准备好`MySQL`和`Redis`
 
-```bash
-docker
-```
++ 执行初始化`SQL`
++ `user.sql`和`data.sql`
++ 修改配置文件
++ 运行后端
 
-部署文档请查阅：<https://doc.mindstream.top>
+部署文档请查阅：<https://mindstream.integer.top>
 
 
 ## 许可证

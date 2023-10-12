@@ -1,17 +1,23 @@
 package top.integer.blog.init;
 
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import top.integer.blog.constant.VariableConstant;
+import top.integer.blog.operation.VariableOperation;
 
 import java.util.List;
 
 @Component
 public class InitializeData implements InitializingBean {
     private List<Init> initComponent;
-    private static final int targetVersion = 10;
+    private static final int targetVersion = 5;
+    private VariableOperation variableOperation;
+
+    @Autowired
+    public void setVariableMapper(VariableOperation variableOperation) {
+        this.variableOperation = variableOperation;
+    }
 
     @Autowired
     public void setInitComponent(List<Init> initComponent) {
@@ -20,12 +26,12 @@ public class InitializeData implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        // todo 读取数据库中的版本号
-        int currentVersion = 4;
+        int currentVersion = variableOperation.getValueInt(VariableConstant.VERSION);
         for (Init init : initComponent) {
             init.doInit(currentVersion);
         }
-        // 修改数据库中的版本号
-        currentVersion = targetVersion;
+        if (currentVersion != targetVersion) {
+            variableOperation.setValue(VariableConstant.VERSION, targetVersion);
+        }
     }
 }

@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import top.integer.blog.enums.Permission;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 

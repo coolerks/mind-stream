@@ -79,7 +79,7 @@ CREATE TABLE `ums_user_roles`
     `create_time` datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
     `update_time` datetime     NOT NULL DEFAULT current_timestamp on update current_timestamp COMMENT '更新时间',
     PRIMARY KEY (`id`),
-    key `idx_user_role_id` (`user_id`, `role_id`)
+    unique key `idx_user_role_id` (`user_id`, `role_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='用户角色';
 
@@ -96,7 +96,7 @@ CREATE TABLE `ums_role_menus`
     `create_by`   int unsigned NOT NULL DEFAULT 0 COMMENT '创建者',
     `create_ip`   int unsigned not null default 0 comment '创建者ip',
     PRIMARY KEY (`id`),
-    KEY `idx_role_menu_id` (`role_id`, `menu_id`)
+    unique KEY `idx_role_menu_id` (`role_id`, `menu_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='菜单-角色';
 
@@ -123,7 +123,7 @@ CREATE TABLE `ums_role_permissions`
     `create_time`    datetime     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
     `create_by`      int unsigned NOT NULL DEFAULT 0 COMMENT '修改者',
     PRIMARY KEY (`id`),
-    KEY `idx_role_menu_id` (`role_id`, `permissions_id`)
+    unique KEY `idx_role_menu_id` (`role_id`, `permissions_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='角色-权限';
 
@@ -144,7 +144,6 @@ create table `fms_folder`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='文件夹';
 
-drop table `fms_files`;
 
 create table `fms_files`
 (
@@ -164,3 +163,12 @@ create table `fms_files`
     key idx_parent_id (`folder_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='文件';
+
+create table `ums_variable`
+(
+    `id`    int unsigned   NOT NULL AUTO_INCREMENT primary key COMMENT '自增id',
+    `name`  varchar(128)   NOT NULL unique DEFAULT '' COMMENT '文件名',
+    `value` varchar(10240) not null        default '' comment '值',
+    `type`  varchar(512)   not null        default '' comment '类型'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='环境变量';
