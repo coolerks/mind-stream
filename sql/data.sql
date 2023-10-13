@@ -12,3 +12,6 @@ values (1, 1001, 1, 1001, 1001, current_timestamp, current_timestamp);
 
 insert into ums_variable(name, value, type)
 values ('version', '-1', 'java.lang.Integer');
+
+insert into fms_folder(id, parent_id, user_id, name, description, full_path, create_time, update_time, create_ip)
+values (2, 0, 1001, 'image', '你好，我的世界', '/image', current_timestamp, current_timestamp, 2130706433)
